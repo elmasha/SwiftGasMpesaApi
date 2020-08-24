@@ -12,7 +12,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://mpesamko.herokuapp.com");
+    res.header("Access-Control-Allow-Origin", "https://gasmpesa.herokuapp.com");
     res.header(
       "Access-Control-Allow-Headers",
       "Origin, X-Requested-With, Content-Type, Accept, Authorization"
@@ -28,7 +28,7 @@ app.use((req, res, next) => {
 app.get('/', (req, res,next)=>{
 
 
-res.send("Hello Mkoba App Elmasha Mpesa APi")
+res.send("Hello Welcome to Gas app Mpesa APi")
 
 
 })
@@ -81,7 +81,7 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
                     "PartyA": "254746291229",
                     "PartyB": "174379",
                     "PhoneNumber": _phoneNumber,
-                    "CallBackURL": "http://mpesamko.herokuapp.com/stk_callback",
+                    "CallBackURL": "https://gasmpesa.herokuapp.com/stk_callback",
                     "AccountReference": " Elmasha TEST",
                     "TransactionDesc": "Lipa na Mpesa"
 
@@ -209,8 +209,8 @@ app.post('/b2c', access,_urlencoded, function(req,res,next){
                 "PartyA":"600481",
                 "PartyB":_phoneNumber,
                 "Remarks":"Salary Payment",
-                "QueueTimeOutURL":"http://mpesamko.herokuapp.com/timeout_url",
-                "ResultURL":"http://mpesamko.herokuapp.com/result_url",
+                "QueueTimeOutURL":"http://gasmpesa.herokuapp.com/timeout_url",
+                "ResultURL":"http://gasmpesa.herokuapp.com/result_url",
                 "Occasion":"MpesaApi001 "
 
             }
@@ -270,8 +270,8 @@ app.get('/reverse', access,_urlencoded, function (req, res) {
                 "Amount":"100",
                 "ReceiverParty":"601342",
                 "RecieverIdentifierType":"11",
-                "ResultURL":"http://197.248.86.122:801/reverse_result_url",
-                "QueueTimeOutURL":"http://197.248.86.122:801/reverse_timeout_url",
+                "ResultURL":"https://gasmpesa.herokuapp.com/reverse_result_url",
+                "QueueTimeOutURL":"https://gasmpesa.herokuapp.com/reverse_timeout_url",
                 "Remarks":"Wrong Num",
                 "Occasion":"sent wrongly"
             }
@@ -314,8 +314,8 @@ app.get('/Register_urls',access,(res,req,next)=>{
             json:{
       "ShortCode":"600481",
       "ResponseType":"Complete",
-      "ConfirmationURL":"http://mpesamko.herokuapp.com/confirmation",
-      "ValidationURL":"http://mpesamko.herokuapp.com/validation_url"
+      "ConfirmationURL":"http://gasmpesa.herokuapp.com/confirmation",
+      "ValidationURL":"http://gasmpesa.herokuapp.com/validation_url"
             }
         },
         function(error,response,body){
