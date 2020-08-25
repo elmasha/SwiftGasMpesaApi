@@ -77,10 +77,10 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
                     "Password": password,
                     "Timestamp": timeStamp,
                     "TransactionType": "CustomerPayBillOnline",
-                    "Amount": "1",
+                    "Amount": _Amount,
                     "PartyA": "254746291229",
                     "PartyB": "174379",
-                    "PhoneNumber": "254746291229",
+                    "PhoneNumber": _phoneNumber,
                     "CallBackURL": "http://gasmpesa.herokuapp.com/stk_callback",
                     "AccountReference": "Gas App delivery",
                     "TransactionDesc": "Lipa na Mpesa"
@@ -93,6 +93,7 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
             if(error){
 
                 console.log(error);
+                res.status(404).json(error);
 
             }else{
 
@@ -159,7 +160,7 @@ app.post('/stk/query',access,_urlencoded,function(req,res,next){
             if(error){
 
                 console.log(error);
-                res.status(404).send();
+                res.status(404).json(error);
 
             }else{
                 res.status(200).json(body)
