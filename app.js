@@ -10,6 +10,7 @@ const port = app.listen(process.env.PORT || 4334);
 const _urlencoded = express.urlencoded({ extended: false })
 app.use(cors())
 app.use(express.json())
+app.use(express.static('public'));
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "https://gasmpesa.herokuapp.com");
@@ -28,7 +29,8 @@ app.use((req, res, next) => {
 app.get('/', (req, res,next)=>{
 
 
-res.send("Hello Welcome to Gas app Mpesa APi")
+
+res.sendFile('public/index.html',{root: __filename})
 
 
 })
@@ -99,6 +101,7 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
 
                 res.status(200).json(body)
                 console.log(body)
+                next()
 
             }
                
@@ -108,13 +111,13 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
 });
 
 //-----Callback Url ----///
-app.post('/stk_callback',_urlencoded,function(req,res){
+app.post('/stk_callback',_urlencoded,function(req,res,next){
     
     console.log('.......... STK Callback ..................');
     
     console.log((req.body))
     res.status(200).json((req.body))
-    
+    next()
 
     })
 
@@ -165,6 +168,7 @@ app.post('/stk/query',access,_urlencoded,function(req,res,next){
             }else{
                 res.status(200).json(body)
                 console.log(body)
+                next()
             }
 
         })
