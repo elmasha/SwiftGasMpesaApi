@@ -84,7 +84,7 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
                     "TransactionType": "CustomerPayBillOnline",
                     "Amount": _Amount,
                     "PartyA": "254746291229",
-                    "PartyB": "174379",
+                    "PartyB": "328293", //Till No.
                     "PhoneNumber": _phoneNumber,
                     "CallBackURL": "http://gasmpesa.herokuapp.com/stk_callback",
                     "AccountReference": "Gas App delivery",
