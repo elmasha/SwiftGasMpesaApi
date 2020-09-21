@@ -30,8 +30,9 @@ app.get('/', (req, res,next)=>{
 
 
 
-res.sendFile('public/index.html',{root: __filename})
+// res.sendFile('public/index.html',{root: __filename})
 
+res.send("Hello welcome to SwiftGas Mpesa API")
 
 })
 
@@ -44,6 +45,8 @@ app.get('/access_token',access,(req,res)=>{
     res.status(200).json({access_token: req.access_token})
 
 })
+
+
 
 ///----Stk Push ---//
 app.post('/stk', access, _urlencoded,function(req,res,next){
