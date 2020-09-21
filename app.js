@@ -87,7 +87,7 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
                     "PartyB": "328293", //Till No.
                     "PhoneNumber": _phoneNumber,
                     "CallBackURL": "http://gasmpesa.herokuapp.com/stk_callback",
-                    "AccountReference": "Gas App delivery",
+                    "AccountReference": "SwiftGas App delivery",
                     "TransactionDesc": "Lipa na Mpesa"
 
             }
