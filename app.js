@@ -54,7 +54,7 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
     let endpoint = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
     let auth = "Bearer "+ req.access_token
 
-    let _shortCode = '174379';
+    let _shortCode = '328293';
     let _passKey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
    
 
@@ -78,7 +78,7 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
     
         json:{
     
-                    "BusinessShortCode": "174379",
+                    "BusinessShortCode": "328293",
                     "Password": password,
                     "Timestamp": timeStamp,
                     "TransactionType": "CustomerPayBillOnline",
