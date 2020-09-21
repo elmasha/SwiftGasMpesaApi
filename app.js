@@ -54,7 +54,7 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
     let endpoint = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
     let auth = "Bearer "+ req.access_token
 
-    let _shortCode = '328293';
+    let _shortCode = '174379';
     let _passKey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
    
 
@@ -78,16 +78,16 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
     
         json:{
     
-                    "BusinessShortCode": "328293",
+                    "BusinessShortCode": "174379",
                     "Password": password,
                     "Timestamp": timeStamp,
                     "TransactionType": "CustomerPayBillOnline",
                     "Amount": _Amount,
                     "PartyA": "254746291229",
-                    "PartyB": "328293", //Till No.
+                    "PartyB": "174379", //Till  No.
                     "PhoneNumber": _phoneNumber,
                     "CallBackURL": "http://gasmpesa.herokuapp.com/stk_callback",
-                    "AccountReference": "SwiftGas App delivery",
+                    "AccountReference": "Gas App delivery",
                     "TransactionDesc": "Lipa na Mpesa"
 
             }
