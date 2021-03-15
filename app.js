@@ -6,12 +6,34 @@ const cors = require('cors');
 const apiCallFromRequest = require('./Request')
 const apiCallFromNode = require('./nodeCalls');
 
+
+const firebase = require("firebase/app");
+require("firebase/firestore");
+
+var firebaseConfig = {
+  apiKey: "AIzaSyDRtR2dTP3DQnMEDIPNTiyj_wrnmtbr168",
+  authDomain: "chapchapgas-2d104.firebaseapp.com",
+  databaseURL: "https://chapchapgas-2d104.firebaseio.com",
+  projectId: "chapchapgas-2d104",
+  storageBucket: "chapchapgas-2d104.appspot.com",
+  messagingSenderId: "706742017410",
+  appId: "1:706742017410:web:281eaf8dda6621a43e039b",
+  measurementId: "G-9FLZ4NS6F9"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig)
+const db = firebase.firestore()
 const port = app.listen(process.env.PORT || 4334);
 const _urlencoded = express.urlencoded({ extended: false })
 app.use(cors())
 app.use(express.json())
 app.use(express.static('public'));
 
+
+
+
+
+////---------Allow Accesss origin -----///
 app.use((req, res, next) => {
     //res.header("Access-Control-Allow-Origin", "https://gasmpesa.herokuapp.com");
     res.header("Access-Control-Allow-Headers",
@@ -28,11 +50,8 @@ app.use((req, res, next) => {
 //routes
 app.get('/', (req, res,next)=>{
 
-
-
-// res.sendFile('public/index.html',{root: __filename})
-
 res.send("Hello welcome to SwiftGas Mpesa API")
+
 
 })
 
@@ -49,7 +68,7 @@ app.get('/access_token',access,(req,res)=>{
 
 
 ///----Stk Push ---//
-app.post('/stk', access, _urlencoded,function(req,res,next){
+app.get('/stk', access, _urlencoded,function(req,res){
 
     let endpoint = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
     let auth = "Bearer "+ req.access_token
@@ -66,7 +85,8 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
     console.log("amount",req.body.amount)
       
     const timeStamp = (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3);
-    const password = Buffer.from(`${_shortCode}${_passKey}${timeStamp}`).toString('base64');
+    const password = 
+    Buffer.from(`${_shortCode}${_passKey}${timeStamp}`).toString('base64');
 
     request(
         {
@@ -87,7 +107,7 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
                     "PartyB": "174379", //Till  No.
                     "PhoneNumber": _phoneNumber,
                     "CallBackURL": "http://gasmpesa.herokuapp.com/stk_callback",
-                    "AccountReference": "Gas App delivery",
+                    "AccountReference": "SwiftGas digital Merchants",
                     "TransactionDesc": "Lipa na Mpesa"
 
             }
@@ -102,9 +122,8 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
 
             }else{
 
-                res.status(200).json(body)
-                console.log(body)
-                next()
+                res.status(200).json(body);
+                console.log(body);
 
             }
                
@@ -115,11 +134,35 @@ app.post('/stk', access, _urlencoded,function(req,res,next){
 
 //-----Callback Url ----///
 app.post('/stk_callback',_urlencoded,function(req,res,next){
-    
+    const payarray = [];
+    var transID ='';
+    var amount = '';
+    var transdate = '';
+    var transNo = '';
+
     console.log('.......... STK Callback ..................');
-    
-    console.log((req.body))
-    res.status(200).json((req.body))
+    if(res.status(200)){
+        res.json((req.body))
+        
+        payarray.push(req.body.Body.stkCallback.CallbackMetadata.Item);
+        amount = payarray[0];
+        transID = payarray[1];
+        transdate = payarray[2];
+        transNo = payarray[3];
+
+        console.log(payarray);
+        // db.collection("Payment-BackUp")
+        // .update({payarray})
+        // .then((ref) => {
+        //   console.log("Added doc with ID: ", ref.id);
+        //   // Added doc with ID:  ZzhIgLqELaoE3eSsOazu
+        // });
+        
+    }else if(res.status(404)){
+        res.json((req.body))
+        console.log(req.body);
+    }
+
     next()
 
     })
