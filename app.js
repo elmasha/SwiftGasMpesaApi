@@ -68,7 +68,7 @@ app.get('/access_token',access,(req,res)=>{
 
 
 ///----Stk Push ---//
-app.get('/stk', access, _urlencoded,function(req,res){
+app.post('/stk', access, _urlencoded,function(req,res){
 
     let endpoint = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
     let auth = "Bearer "+ req.access_token
@@ -106,7 +106,7 @@ app.get('/stk', access, _urlencoded,function(req,res){
                     "PartyA": "254746291229",
                     "PartyB": "174379", //Till  No.
                     "PhoneNumber": _phoneNumber,
-                    "CallBackURL": "http://gasmpesa.herokuapp.com/stk_callback",
+                    "CallBackURL": "https://cd761cf8a0e7.ngrok.io/stk_callback",
                     "AccountReference": "SwiftGas digital Merchants",
                     "TransactionDesc": "Lipa na Mpesa"
 
@@ -149,6 +149,7 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         transID = payarray[1];
         transdate = payarray[2];
         transNo = payarray[3];
+
 
         console.log(payarray);
         // db.collection("Payment-BackUp")
