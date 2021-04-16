@@ -68,7 +68,7 @@ app.get('/access_token',access,(req,res)=>{
 
 
 ///----Stk Push ---//
-app.post('/stk', access, _urlencoded,function(req,res){
+app.get('/stk', access, _urlencoded,function(req,res){
 
     let endpoint = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
     let auth = "Bearer "+ req.access_token
@@ -79,10 +79,12 @@ app.post('/stk', access, _urlencoded,function(req,res){
 
      let _phoneNumber = req.body.phone
      let _Amount = req.body.amount
+     let userID = req.body.user_ID
+     let userName = req.body.name
 
 
-    console.log("phone",req.body.phone)
-    console.log("amount",req.body.amount)
+    console.log("phone",req.body.user_ID)
+    console.log("amount",req.body.name)
       
     const timeStamp = (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3);
     const password = 
@@ -102,11 +104,11 @@ app.post('/stk', access, _urlencoded,function(req,res){
                     "Password": password,
                     "Timestamp": timeStamp,
                     "TransactionType": "CustomerPayBillOnline",
-                    "Amount": _Amount,
+                    "Amount": "1",
                     "PartyA": "254746291229",
                     "PartyB": "174379", //Till  No.
-                    "PhoneNumber": _phoneNumber,
-                    "CallBackURL": "https://cd761cf8a0e7.ngrok.io/stk_callback",
+                    "PhoneNumber": "254746291229",
+                    "CallBackURL": "https://c52b5a9de7ef.ngrok.io/stk_callback",
                     "AccountReference": "SwiftGas digital Merchants",
                     "TransactionDesc": "Lipa na Mpesa"
 
@@ -122,7 +124,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
 
             }else{
 
-                res.status(200).json(body);
+                res.status(200).json(body.CheckoutRequestID);
                 console.log(body);
 
             }
@@ -139,19 +141,21 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
     var amount = '';
     var transdate = '';
     var transNo = '';
+    var userID = '';
+    var userName = '';
 
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
         res.json((req.body))
         
-        payarray.push(req.body.Body.stkCallback.CallbackMetadata.Item);
-        amount = payarray[0];
-        transID = payarray[1];
-        transdate = payarray[2];
-        transNo = payarray[3];
+    
+        
+        var obj = req.body.Body.stkCallback.CallbackMetadata.Item[1].Name;
+        console.log(obj);
+        console.log(req.body.Body.stkCallback.CallbackMetadata)
+        
 
 
-        console.log(payarray);
         // db.collection("Payment-BackUp")
         // .update({payarray})
         // .then((ref) => {
@@ -238,10 +242,11 @@ app.post('/b2c', access,_urlencoded, function(req,res,next){
     
      let _phoneNumber = req.body.phone
      let _Amount = req.body.amount
+     
 
 
-    console.log("phone",req.body.phone)
-    console.log("amount",req.body.amount)
+    console.log("phone",req.body.user_ID)
+    console.log("amount",req.body.user_ID)
 
     request(
         {
