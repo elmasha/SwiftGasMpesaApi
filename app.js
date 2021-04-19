@@ -109,7 +109,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
                     "PartyA": _phoneNumber,
                     "PartyB": "174379", //Till  No.
                     "PhoneNumber": "254746291229",
-                    "CallBackURL": "https://658d79608171.ngrok.io/stk_callback",
+                    "CallBackURL": "https://gasmpesa.herokuapp.com/stk_callback",
                     "AccountReference": "SwiftGas digital Merchants",
                     "TransactionDesc": _transDec
 
