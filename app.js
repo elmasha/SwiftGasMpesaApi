@@ -125,7 +125,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
 
             }else{
 
-                res.status(200).json(body.CheckoutRequestID);
+                res.status(200).json(body);
                 console.log(body);
 
             }
@@ -148,8 +148,6 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
         res.json((req.body))
-        
-    
         
         var obj = req.body.Body.stkCallback.CallbackMetadata.Item[1].Name;
         console.log(obj);
@@ -312,7 +310,7 @@ app.post('/result_url', _urlencoded, function(req, res) {
 
 
 
-///-------REversals ----///////
+///-------Reversals ----///////
 app.get('/reverse', access,_urlencoded, function (req, res) {
     const url = 'https://sandbox.safaricom.co.ke/mpesa/reversal/v1/request',
         auth = 'Bearer ' + req.access_token
@@ -347,15 +345,6 @@ app.get('/reverse', access,_urlencoded, function (req, res) {
             }
         )
 })
-
-
-
-
-
-
-
-
-
 
 
 
