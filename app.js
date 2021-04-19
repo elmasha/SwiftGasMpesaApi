@@ -68,7 +68,7 @@ app.get('/access_token',access,(req,res)=>{
 
 
 ///----Stk Push ---//
-app.get('/stk', access, _urlencoded,function(req,res){
+app.post('/stk', access, _urlencoded,function(req,res){
 
     let endpoint = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
     let auth = "Bearer "+ req.access_token
@@ -81,6 +81,7 @@ app.get('/stk', access, _urlencoded,function(req,res){
      let _Amount = req.body.amount
      let userID = req.body.user_ID
      let userName = req.body.name
+     let _transDec = req.body.transDec;
 
 
     console.log("phone",req.body.user_ID)
@@ -104,13 +105,13 @@ app.get('/stk', access, _urlencoded,function(req,res){
                     "Password": password,
                     "Timestamp": timeStamp,
                     "TransactionType": "CustomerPayBillOnline",
-                    "Amount": "1",
-                    "PartyA": "254746291229",
+                    "Amount": _Amount,
+                    "PartyA": _phoneNumber,
                     "PartyB": "174379", //Till  No.
                     "PhoneNumber": "254746291229",
-                    "CallBackURL": "https://c52b5a9de7ef.ngrok.io/stk_callback",
+                    "CallBackURL": "https://658d79608171.ngrok.io/stk_callback",
                     "AccountReference": "SwiftGas digital Merchants",
-                    "TransactionDesc": "Lipa na Mpesa"
+                    "TransactionDesc": _transDec
 
             }
 
@@ -152,8 +153,12 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         
         var obj = req.body.Body.stkCallback.CallbackMetadata.Item[1].Name;
         console.log(obj);
-        console.log(req.body.Body.stkCallback.CallbackMetadata)
         
+        $(jQuery.parseJSON(JSON.stringify(req.body.Body.stkCallback.CallbackMetadata))).each(function() {  
+            var ID = this.id;
+            var Amount = this.Amount;
+            console.log()
+        });
 
 
         // db.collection("Payment-BackUp")
