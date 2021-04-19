@@ -106,10 +106,10 @@ app.post('/stk', access, _urlencoded,function(req,res){
                     "Timestamp": timeStamp,
                     "TransactionType": "CustomerPayBillOnline",
                     "Amount": _Amount,
-                    "PartyA": _phoneNumber,
+                    "PartyA": "174379",
                     "PartyB": "174379", //Till  No.
-                    "PhoneNumber": "254746291229",
-                    "CallBackURL": "https://gasmpesa.herokuapp.com/stk_callback",
+                    "PhoneNumber": _phoneNumber,
+                    "CallBackURL": "https://fa290f3f0755.ngrok.io/stk_callback",
                     "AccountReference": "SwiftGas digital Merchants",
                     "TransactionDesc": _transDec
 
@@ -120,13 +120,15 @@ app.post('/stk', access, _urlencoded,function(req,res){
 
             if(error){
 
+                
                 console.log(error);
                 res.status(404).json(body);
 
             }else{
-
+                
                 res.status(200).json(body);
                 console.log(body);
+                let _checkoutRequestId2 = body.CheckoutRequestID; 
 
             }
                
@@ -142,29 +144,28 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
     var amount = '';
     var transdate = '';
     var transNo = '';
-    var userID = '';
     var userName = '';
 
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
         res.json((req.body))
         
-        var obj = req.body.Body.stkCallback.CallbackMetadata.Item[1].Name;
-        console.log(obj);
+        console.log(req.body.Body.stkCallback.CallbackMetadata)
+
+        const data ={
+       TransID : transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value,
+       TransAmoun : amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value,
+       TransNo : transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value,
+       CheckoutRequestID : _checkoutRequestId2,
+       Timestamp : transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value
+        }
         
-        $(jQuery.parseJSON(JSON.stringify(req.body.Body.stkCallback.CallbackMetadata))).each(function() {  
-            var ID = this.id;
-            var Amount = this.Amount;
-            console.log()
-        });
-
-
-        // db.collection("Payment-BackUp")
-        // .update({payarray})
-        // .then((ref) => {
-        //   console.log("Added doc with ID: ", ref.id);
-        //   // Added doc with ID:  ZzhIgLqELaoE3eSsOazu
-        // });
+    
+        db.collection("Payments_backup").doc().set(data)
+        .then(function() {
+            console.log("Payment created");
+          });
+    
         
     }else if(res.status(404)){
         res.json((req.body))
@@ -183,7 +184,7 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
 ///----STK QUERY ---
 app.post('/stk/query',access,_urlencoded,function(req,res,next){
 
-    let checkoutRequestId = req.body.checkoutRequestId
+    let _checkoutRequestId = req.body.checkoutRequestId
 
     auth = "Bearer "+ req.access_token
 
@@ -207,7 +208,7 @@ app.post('/stk/query',access,_urlencoded,function(req,res,next){
             'BusinessShortCode': _shortCode,
             'Password': password,
             'Timestamp': timeStamp,
-            'CheckoutRequestID': checkoutRequestId
+            'CheckoutRequestID': _checkoutRequestId
 
             }
 
@@ -345,6 +346,7 @@ app.get('/reverse', access,_urlencoded, function (req, res) {
             }
         )
 })
+
 
 
 
