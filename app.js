@@ -57,7 +57,6 @@ res.send("Hello welcome to SwiftGas Mpesa API")
 
 
 
-
 ///----Access Token ---//
 app.get('/access_token',access,(req,res)=>{
 
@@ -109,7 +108,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
                     "PartyA": "174379",
                     "PartyB": "174379", //Till  No.
                     "PhoneNumber": _phoneNumber,
-                    "CallBackURL": "https://fa290f3f0755.ngrok.io/stk_callback",
+                    "CallBackURL": "https://gasmpesa.herokuapp.com/stk_callback",
                     "AccountReference": "SwiftGas digital Merchants",
                     "TransactionDesc": _transDec
 
