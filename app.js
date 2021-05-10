@@ -33,7 +33,7 @@ app.use(express.static('public'));
 
 
 
-////---------Allow Accesss origin -----///
+////---------Allow Access origin -----///
 app.use((req, res, next) => {
     //res.header("Access-Control-Allow-Origin", "https://gasmpesa.herokuapp.com");
     res.header("Access-Control-Allow-Headers",
@@ -67,20 +67,22 @@ app.get('/access_token',access,(req,res)=>{
 
 
 ///----Stk Push ---//
-app.post('/stk', access, _urlencoded,function(req,res){
+app.get('/stk', access, _urlencoded,function(req,res){
 
-    let endpoint = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+    let _phoneNumber = req.body.phone
+    let _Amount = req.body.amount
+    let userID = req.body.user_ID
+    let userName = req.body.name
+    let _transDec = req.body.transDec;
+
+
+    let endpoint = " https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
     let auth = "Bearer "+ req.access_token
 
-    let _shortCode = '174379';
-    let _passKey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
+    let _shortCode = '4069571';
+    let _passKey = '8e2d5d66120bfb538400be31f2fa885e90ef3acb5bc037454bbf23223fcb394a'
    
 
-     let _phoneNumber = req.body.phone
-     let _Amount = req.body.amount
-     let userID = req.body.user_ID
-     let userName = req.body.name
-     let _transDec = req.body.transDec;
 
 
     console.log("phone",req.body.user_ID)
@@ -100,17 +102,17 @@ app.post('/stk', access, _urlencoded,function(req,res){
     
         json:{
     
-                    "BusinessShortCode": "174379",
+                    "BusinessShortCode": "4069571",
                     "Password": password,
                     "Timestamp": timeStamp,
                     "TransactionType": "CustomerPayBillOnline",
-                    "Amount": _Amount,
-                    "PartyA": "174379",
-                    "PartyB": "174379", //Till  No.
-                    "PhoneNumber": _phoneNumber,
+                    "Amount": "1",
+                    "PartyA": "254746291229",
+                    "PartyB": "4069571", //Till  No.
+                    "PhoneNumber": "254746291229",
                     "CallBackURL": "https://gasmpesa.herokuapp.com/stk_callback",
                     "AccountReference": "SwiftGas digital Merchants",
-                    "TransactionDesc": _transDec
+                    "TransactionDesc": "_transDec"
 
             }
 
@@ -397,14 +399,14 @@ app.post('/validation', (req, resp) => {
 
 function access(res,req,next){
 
-    const endpoint ="https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
-    const auth = new Buffer.from('K49Zle6LPHOGv7avuuw61MfIIWzai9gS:FQCGD4QOIFM4j8HJ').toString('base64');
+    const endpoint ="https://api.safaricom.co.ke/oauth/v1/generate"
+    const auth = new Buffer.from('VOdUZdGbCRAAWXMHNvANE8cWU1uu0AR9:nSDT7heoT4sizu66').toString('base64');
 
     request(
     {
         url:endpoint,
         headers:{
-            "Authorization": "Basic " + auth
+            "Authorization": "Basic"+ auth
         }
 
     },
@@ -414,7 +416,8 @@ function access(res,req,next){
             console.log(error);
         }else{
         
-            res.access_token = JSON.parse(body).access_token
+            res.access_token = JSON.stringify(body).access_token
+            console.log(res.access_token = JSON.parse(body).access_token)
             next()
         
         }
