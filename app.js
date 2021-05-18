@@ -106,13 +106,13 @@ app.get('/stk', access, _urlencoded,function(req,res){
                     "Password": password,
                     "Timestamp": timeStamp,
                     "TransactionType": "CustomerPayBillOnline",
-                    "Amount": "1",
-                    "PartyA": "254746291229",
+                    "Amount": _Amount,
+                    "PartyA": _phoneNumber,
                     "PartyB": "4069571", //Till  No.
-                    "PhoneNumber": "254746291229",
+                    "PhoneNumber": _phoneNumber,
                     "CallBackURL": "https://gasmpesa.herokuapp.com/stk_callback",
                     "AccountReference": "SwiftGas digital Merchants",
-                    "TransactionDesc": "_transDec"
+                    "TransactionDesc": _transDec
 
             }
 
@@ -183,15 +183,15 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
 
 
 ///----STK QUERY ---
-app.post('/stk/query',access,_urlencoded,function(req,res,next){
+app.get('/stk/query',access,_urlencoded,function(req,res,next){
 
     let _checkoutRequestId = req.body.checkoutRequestId
 
     auth = "Bearer "+ req.access_token
 
-    let endpoint ='https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query'
-    const _shortCode = '174379'
-    const _passKey = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
+    let endpoint =' https://api.safaricom.co.ke/mpesa/stkpushquery/v1/query'
+    const _shortCode = '4069571'
+    const _passKey = '8e2d5d66120bfb538400be31f2fa885e90ef3acb5bc037454bbf23223fcb394a'
     const timeStamp = (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3)
     const password = Buffer.from(`${_shortCode}${_passKey}${timeStamp}`).toString('base64')
     
@@ -219,7 +219,7 @@ app.post('/stk/query',access,_urlencoded,function(req,res,next){
             if(error){
 
                 console.log(error);
-                res.status(404).json(error);
+                res.status(404).json(body);
 
             }else{
                 res.status(200).json(body)
@@ -399,14 +399,14 @@ app.post('/validation', (req, resp) => {
 
 function access(res,req,next){
 
-    const endpoint ="https://api.safaricom.co.ke/oauth/v1/generate"
-    const auth = new Buffer.from('VOdUZdGbCRAAWXMHNvANE8cWU1uu0AR9:nSDT7heoT4sizu66').toString('base64');
+    let endpoint ="https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
+    let auth = new Buffer.from("VOdUZdGbCRAAWXMHNvANE8cWU1uu0AR9:nSDT7heoT4sizu66").toString('base64');
 
     request(
     {
         url:endpoint,
         headers:{
-            "Authorization": "Basic"+ auth
+            "Authorization": "Basic  " + auth
         }
 
     },
@@ -416,8 +416,8 @@ function access(res,req,next){
             console.log(error);
         }else{
         
-            res.access_token = JSON.stringify(body).access_token
-            console.log(res.access_token = JSON.parse(body).access_token)
+            res.access_token = JSON.parse(body).access_token
+            console.log(body)
             next()
         
         }
