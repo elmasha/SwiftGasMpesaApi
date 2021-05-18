@@ -67,7 +67,7 @@ app.get('/access_token',access,(req,res)=>{
 
 
 ///----Stk Push ---//
-app.get('/stk', access, _urlencoded,function(req,res){
+app.post('/stk', access, _urlencoded,function(req,res){
 
     let _phoneNumber = req.body.phone
     let _Amount = req.body.amount
@@ -183,7 +183,7 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
 
 
 ///----STK QUERY ---
-app.get('/stk/query',access,_urlencoded,function(req,res,next){
+app.post('/stk/query',access,_urlencoded,function(req,res,next){
 
     let _checkoutRequestId = req.body.checkoutRequestId
 
