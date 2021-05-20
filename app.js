@@ -153,7 +153,9 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         console.log(req.body.Body.stkCallback.CallbackMetadata)
         console.log(req.body.Body.stkCallback.CallbackMetadata.Item[0].Value)
         console.log(req.body.Body.stkCallback.CallbackMetadata.Item[1].Value)
-        console.log(req.body.Body.stkCallback.CallbackMetadata.Item[2].Value)
+        console.log(req.body.Body.stkCallback.CallbackMetadata.Item[3].Value)
+        console.log(req.body.Body.stkCallback.CallbackMetadata.Item[4].Value)
+
 
     const data ={
        TransID : transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value,
@@ -162,6 +164,9 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
        CheckoutRequestID : _checkoutRequestId2,
        Timestamp : transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value
         }
+
+
+        console.log(data)
         
     
         db.collection("Payments_backup").doc().set(data)
