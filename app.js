@@ -151,6 +151,8 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         res.json((req.body.Body.stkCallback.CallbackMetadata.Item[0].Value))
         
         console.log(req.body.Body.stkCallback.CallbackMetadata.Item[0].Value)
+        console.log(req.body.Body.stkCallback.CallbackMetadata.Item[2].Value)
+        console.log(req.body.Body.stkCallback.CallbackMetadata.Item[2].Value)
 
     const data ={
        TransID : transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value,
