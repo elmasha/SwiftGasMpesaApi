@@ -7,11 +7,11 @@ const apiCallFromRequest = require('./Request')
 const apiCallFromNode = require('./nodeCalls');
 
 
-const firebase = require("firebase/app");
+const firebase = require("firebase");
 require("firebase/firestore");
 
 // with ES Modules (if using client-side JS, like React)
-
+git
 
 
 var firebaseConfig = {
