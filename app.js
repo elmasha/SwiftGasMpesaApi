@@ -138,7 +138,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
 });
 
 //-----Callback Url ----///
-app.post('/stk_callback',_urlencoded,function(req,res,next){
+app.get('/stk_callback',_urlencoded,function(req,res,next){
     const payarray = [];
     var transID ='';
     var amount = '';
@@ -152,7 +152,7 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         
         console.log(req.body.Body.stkCallback.CallbackMetadata)
 
-        const data ={
+    const data ={
        TransID : transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value,
        TransAmoun : amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value,
        TransNo : transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value,
