@@ -8,10 +8,8 @@ const apiCallFromNode = require('./nodeCalls');
 
 
 const firebase = require("firebase");
-const admin = require('firebase-admin');
-admin.initializeApp();
+require("firebase/firestore");
 
-const db = admin.firestore();
 // with ES Modules (if using client-side JS, like React)
 
 
@@ -136,7 +134,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
             }else{
                 
                 res.status(200).json(body);
-                _checkoutRequestId2 = res.status(200).json(body.CheckoutRequestID);
+                _checkoutRequestId2 = res.status(200).json(body._checkoutRequestId);
 
                 console.log(body);
 
