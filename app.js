@@ -150,11 +150,15 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
     if(res.status(200)){
         res.json((req.body.Body.stkCallback.CallbackMetadata.Item[0].Value))
         
-        console.log(req.body.Body.stkCallback.CallbackMetadata)
-        console.log(req.body.Body.stkCallback.CallbackMetadata.Item[0].Value)
-        console.log(req.body.Body.stkCallback.CallbackMetadata.Item[1].Value)
-        console.log(req.body.Body.stkCallback.CallbackMetadata.Item[3].Value)
-        console.log(req.body.Body.stkCallback.CallbackMetadata.Item[4].Value)
+        amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
+        transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
+        transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value;
+        transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
+       
+        console.log("Amount",amount)
+        console.log("Transaction",id)
+        console.log("Transaction",transNo)
+        console.log("TransactionTime",transdate)
 
 
     const data ={
