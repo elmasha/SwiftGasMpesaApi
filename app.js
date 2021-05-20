@@ -156,7 +156,7 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
        
         console.log("Amount",amount)
-        console.log("Transaction",id)
+        console.log("Transaction",transID)
         console.log("Transaction",transNo)
         console.log("TransactionTime",transdate)
 
