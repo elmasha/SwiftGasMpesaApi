@@ -148,9 +148,9 @@ app.get('/stk_callback',_urlencoded,function(req,res,next){
 
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
-        res.json((req.body.Body.stkCallback.CallbackMetadata.Item))
+        res.json((req.body.Body.stkCallback.CallbackMetadata.Item[1].Value))
         
-        console.log(req.body.Body.stkCallback.CallbackMetadata.Item)
+        console.log(req.body.Body.stkCallback.CallbackMetadata.Item[1].Value)
 
     const data ={
        TransID : transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value,
@@ -169,7 +169,7 @@ app.get('/stk_callback',_urlencoded,function(req,res,next){
         
     }else if(res.status(404)){
         res.json((req.body))
-        console.log(req.body);
+        console.log(req.body.Body);
     }
 
     next()
