@@ -148,9 +148,9 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
 
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
-        res.json((req.body.Body.stkCallback.CallbackMetadata.Item[1].Value))
+        res.json((req.body.Body.stkCallback.CallbackMetadata.Item[0].Value))
         
-        console.log(req.body.Body.stkCallback.CallbackMetadata.Item[1].Value)
+        console.log(req.body.Body.stkCallback.CallbackMetadata.Item[0].Value)
 
 
     
