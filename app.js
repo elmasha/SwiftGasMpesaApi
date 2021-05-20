@@ -26,6 +26,8 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
 const db = firebase.firestore()
+
+
 const port = app.listen(process.env.PORT || 4334);
 const _urlencoded = express.urlencoded({ extended: false })
 app.use(cors())
@@ -88,8 +90,8 @@ app.post('/stk', access, _urlencoded,function(req,res){
 
 
 
-    console.log("phone",req.body.user_ID)
-    console.log("amount",req.body.name)
+    console.log("phone",_phoneNumber)
+    console.log("amount",_Amount)
       
     const timeStamp = (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3);
     const password = 
@@ -176,7 +178,7 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         
 
 
-        firebase.firestore().collection("Payments_backup").add({
+        db.collection("Payments_backup").add({
             TransID : transID ,
             TransAmount : amount ,
             TransNo : transNo ,
