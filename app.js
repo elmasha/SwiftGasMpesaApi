@@ -129,7 +129,6 @@ app.post('/stk', access, _urlencoded,function(req,res){
                 
                 res.status(200).json(body);
                 console.log(body);
-                let _checkoutRequestId2 = body.CheckoutRequestID; 
 
             }
                
@@ -139,7 +138,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
 });
 
 //-----Callback Url ----///
-app.post('/stk_callback',_urlencoded,function(req,res,next){
+app.get('/stk_callback',_urlencoded,function(req,res,next){
     const payarray = [];
     var transID ='';
     var amount = '';
