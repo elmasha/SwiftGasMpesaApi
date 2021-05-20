@@ -150,10 +150,9 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
     if(res.status(200)){
         res.json((req.body.Body.stkCallback.CallbackMetadata))
         
-        console.log(req.body.Body.stkCallback.CallbackMetadata)
+        console.log(req.body.Body.stkCallback.CallbackMetadata.Item)
 
-   
-        
+
     
         db.collection("Payments_backup").doc().set(data)
         .then(function() {
