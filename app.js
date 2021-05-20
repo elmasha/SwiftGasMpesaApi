@@ -138,7 +138,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
 });
 
 //-----Callback Url ----///
-app.post('/stk_callback',_urlencoded,function(req,res,next){
+app.get('/stk_callback',_urlencoded,function(req,res,next){
     const payarray = [];
     var transID ='';
     var amount = '';
@@ -148,11 +148,18 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
 
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
-        res.json((req.body.Body.stkCallback.CallbackMetadata.Item[0].Value))
+        res.json((req.body))
         
-        console.log(req.body.Body.stkCallback.CallbackMetadata.Item[0].Value)
+        console.log(req.body.Body.stkCallback.CallbackMetadata)
 
-
+    const data ={
+       TransID : transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value,
+       TransAmount : amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value,
+       TransNo : transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value,
+       CheckoutRequestID : _checkoutRequestId2,
+       Timestamp : transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value
+        }
+        
     
         db.collection("Payments_backup").doc().set(data)
         .then(function() {
