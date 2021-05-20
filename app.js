@@ -138,7 +138,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
 });
 
 //-----Callback Url ----///
-app.get('/stk_callback',_urlencoded,function(req,res,next){
+app.post('/stk_callback',_urlencoded,function(req,res,next){
     const payarray = [];
     var transID ='';
     var amount = '';
