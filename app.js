@@ -79,6 +79,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
     let userID = req.body.user_ID
     let userName = req.body.name
     let _transDec = req.body.transDec;
+    let _checkoutRequestId2 ="";
 
 
     let endpoint = " https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
@@ -133,6 +134,8 @@ app.post('/stk', access, _urlencoded,function(req,res){
             }else{
                 
                 res.status(200).json(body);
+                _checkoutRequestId2 = res.status(200).json(body.CheckoutRequestID);
+
                 console.log(body);
 
             }
