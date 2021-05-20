@@ -10,6 +10,12 @@ const apiCallFromNode = require('./nodeCalls');
 const firebase = require("firebase/app");
 require("firebase/firestore");
 
+// with ES Modules (if using client-side JS, like React)
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+
+
+
 var firebaseConfig = {
   apiKey: "AIzaSyDRtR2dTP3DQnMEDIPNTiyj_wrnmtbr168",
   authDomain: "chapchapgas-2d104.firebaseapp.com",
@@ -170,13 +176,19 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         }
 
 
-        console.log(data)
         
-    
-        db.collection("Payments_backup").doc().set(data)
-        .then(function() {
-            console.log("Payment created");
-          });
+
+
+        firebase.firestore().collection("Payments_backup").add({
+            TransID : transID ,
+            TransAmount : amount ,
+            TransNo : transNo ,
+            CheckoutRequestID : _checkoutRequestId2,
+            Timestamp : transdate
+        }).then((ref) => {
+            console.log("Added doc with ID: ", ref.id);
+        });
+
     
         
     }else if(res.status(404)){
