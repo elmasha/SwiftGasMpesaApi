@@ -11,7 +11,7 @@ module.exports ={
         transNo = req.Body.stkCallback.CallbackMetadata.Item[4].Value;
         transdate = req.Body.stkCallback.CallbackMetadata.Item[2].Value;
       
-        firebase.doc(transID).collection("Payments_backup").add({
+        firebase.collection("Payments_backup").add({
             TransID : transID ,
             TransAmount : amount ,
             TransNo : transNo ,
