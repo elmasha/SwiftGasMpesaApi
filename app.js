@@ -117,10 +117,9 @@ app.post('/stk', access, _urlencoded,function(req,res){
             }else{
                 
                 res.status(200).json(body);
-                _checkoutRequestId2 = res.status(200).json(body.CheckoutRequestID);
+                _checkoutRequestId2 = res.status(200).json(body._checkoutRequestId);
 
-                console.log(_checkoutRequestId2);
-                console.log(body)
+                console.log(body);
 
             }
                
@@ -141,7 +140,7 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
         res.json((req.body.Body.stkCallback.CallbackMetadata))
-        console.log(req.body.Body.stkCallback.CallbackMetadata.Item)
+        console.log(req.body.Body.stkCallback.CallbackMetadata)
 
     
         
@@ -159,6 +158,7 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
             TransID : transID ,
             TransAmount : amount ,
             TransNo : transNo ,
+            CheckoutRequestID : _checkoutRequestId2,
             Timestamp : transdate
         }).then((ref) => {
             console.log("Added doc with ID: ", ref.id);
