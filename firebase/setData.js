@@ -8,7 +8,7 @@ module.exports ={
 
         amount = req.Body.stkCallback.CallbackMetadata.Item[0].Value;
         transID = req.Body.stkCallback.CallbackMetadata.Item[1].Value;
-        transNo = req.Body.stkCallback.CallbackMetadata.Item[4].Value;
+        transNo = req.Body.stkCallback.CallbackMetadata.Item[3].Value;
         transdate = req.Body.stkCallback.CallbackMetadata.Item[2].Value;
       
         firebase.collection("Payments_backup").add({
