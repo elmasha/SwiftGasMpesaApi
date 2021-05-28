@@ -13,11 +13,10 @@ module.exports ={
         transdate = req.Body.stkCallback.CallbackMetadata.Item[3].Value;
         userName = req.body.userName;
       
-        firebase.collection("Payments_backup").add({
+        firebase.doc(transID).collection("Payments_backup").add({
             TransID : transID ,
             TransAmount : amount ,
             TransNo : transNo ,
-            User_name: userName,
             Timestamp : transdate
         }).then((ref) => {
             console.log("Added doc with ID: ", ref.id);
