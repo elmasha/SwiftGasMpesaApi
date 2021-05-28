@@ -148,8 +148,9 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         
         amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
         transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
-        transNo = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
-        transdate = req.body.Body.stkCallback.CallbackMetadata.Item[2].Value;
+        transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value;
+        transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
+
        
         console.log("Amount",amount)
         console.log("Transaction",transID)
