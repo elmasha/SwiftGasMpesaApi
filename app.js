@@ -119,7 +119,8 @@ app.post('/stk', access, _urlencoded,function(req,res){
                 res.status(200).json(body);
                 _checkoutRequestId2 = res.status(200).json(body._checkoutRequestId);
 
-                console.log(body);
+                console.log(_checkoutRequestId2);
+                console.log(body)
 
             }
                
