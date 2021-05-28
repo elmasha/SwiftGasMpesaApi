@@ -5,7 +5,8 @@ const app = express();
 const cors = require('cors');
 const apiCallFromRequest = require('./Request')
 const apiCallFromNode = require('./nodeCalls');
-const Ofirebase = require("./firebase/setData");
+const firebase = require("./firebase_connect");
+
 
 // with ES Modules (if using client-side JS, like React)
 
@@ -138,12 +139,10 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
 
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
-        res.json((req.body.Body.stkCallback.CallbackMetadata.Item[0].Value))
-        console.log()
+        res.json((req.body.Body.stkCallback.CallbackMetadata))
+        console.log(req.body.Body.stkCallback.CallbackMetadata)
 
-        Ofirebase.stk_callback(req.body,function(err,data){
-            res.send(data);
-        });
+    
         
         amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
         transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
@@ -155,17 +154,15 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         console.log("Transaction",transNo)
         console.log("TransactionTime",transdate)
 
-
-    const data ={
-       TransID : transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value,
-       TransAmount : amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value,
-       TransNo : transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value,
-       CheckoutRequestID : _checkoutRequestId2,
-       Timestamp : transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value
-        }
-
-
-        
+        firebase.collection("Payments_backup").add({
+            TransID : transID ,
+            TransAmount : amount ,
+            TransNo : transNo ,
+            CheckoutRequestID : _checkoutRequestId2,
+            Timestamp : transdate
+        }).then((ref) => {
+            console.log("Added doc with ID: ", ref.id);
+        });
 
         
     }else if(res.status(404)){
