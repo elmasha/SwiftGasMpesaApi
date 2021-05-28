@@ -60,7 +60,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
     let _phoneNumber = req.body.phone
     let _Amount = req.body.amount
     let userID = req.body.user_ID
-    let userName = req.body.name
+    let userName = req.body.userName
     let _transDec = req.body.transDec;
     let _checkoutRequestId2 ="";
 
@@ -76,6 +76,8 @@ app.post('/stk', access, _urlencoded,function(req,res){
 
     console.log("phone",_phoneNumber)
     console.log("amount",_Amount)
+    console.log("userName",userName)
+    
       
     const timeStamp = (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3);
     const password = 
