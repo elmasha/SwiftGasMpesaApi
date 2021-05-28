@@ -5,7 +5,7 @@ const app = express();
 const cors = require('cors');
 const apiCallFromRequest = require('./Request')
 const apiCallFromNode = require('./nodeCalls');
-const firebase = require("./firebase/firebase_connect");
+const Ofirebase = require("./firebase/setData");
 
 
 // with ES Modules (if using client-side JS, like React)
@@ -154,15 +154,9 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         console.log("Transaction",transNo)
         console.log("TransactionTime",transdate)
 
-        firebase.collection("Payments_backup").add({
-            TransID : transID ,
-            TransAmount : amount ,
-            TransNo : transNo ,
-            CheckoutRequestID : _checkoutRequestId2,
-            Timestamp : transdate
-        }).then((ref) => {
-            console.log("Added doc with ID: ", ref.id);
-        });
+        Ofirebase.stk_callback(req.Body,function(err,data){
+           return res.send(data);
+        })
 
         
     }else if(res.status(404)){
