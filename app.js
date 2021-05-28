@@ -129,7 +129,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
 
                 
                 console.log(error);
-                res.status(404).json(body);
+                res.status(404).json(error);
 
             }else{
                 
@@ -137,7 +137,6 @@ app.post('/stk', access, _urlencoded,function(req,res){
                 _checkoutRequestId2 = res.status(200).json(body._checkoutRequestId);
 
                 console.log(body);
-                console.log(_checkoutRequestId2);
 
             }
                
