@@ -40,7 +40,7 @@ app.use(express.static('public'));
 
 ////---------Allow Access origin -----///
 app.use((req, res, next) => {
-    //res.header("Access-Control-Allow-Origin", "https://gasmpesa.herokuapp.com");
+    res.header("Access-Control-Allow-Origin", "https://gasmpesa.herokuapp.com");
     res.header("Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     
@@ -137,6 +137,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
                 _checkoutRequestId2 = res.status(200).json(body._checkoutRequestId);
 
                 console.log(body);
+                console.log(_checkoutRequestId2);
 
             }
                
