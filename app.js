@@ -159,7 +159,6 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
             TransID : transID ,
             TransAmount : amount ,
             TransNo : transNo ,
-            CheckoutRequestID : _checkoutRequestId2,
             Timestamp : transdate
         }).then((ref) => {
             console.log("Added doc with ID: ", ref.id);
