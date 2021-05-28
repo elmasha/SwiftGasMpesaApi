@@ -5,7 +5,7 @@ var transdate = '';
 var transNo = '';
 var userName = '';
 module.exports ={
-    stk_callback: function(req,callback){
+    stk_callback: function(req,userName,callback){
 
         amount = req.Body.stkCallback.CallbackMetadata.Item[0].Value;
         transID = req.Body.stkCallback.CallbackMetadata.Item[1].Value;
@@ -16,6 +16,7 @@ module.exports ={
             TransID : transID ,
             TransAmount : amount ,
             TransNo : transNo ,
+            User_name: userName,
             Timestamp : transdate
         }).then((ref) => {
             console.log("Added doc with ID: ", ref.id);

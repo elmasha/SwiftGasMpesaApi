@@ -156,7 +156,7 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         console.log("Transaction",transNo)
         console.log("TransactionTime",transdate)
 
-        Ofirebase.stk_callback(req.body,function(err,data){
+        Ofirebase.stk_callback(req.body,userName,function(err,data,userName){
            return res.send(data);
         })
 
