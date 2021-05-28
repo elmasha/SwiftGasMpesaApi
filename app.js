@@ -5,7 +5,7 @@ const app = express();
 const cors = require('cors');
 const apiCallFromRequest = require('./Request')
 const apiCallFromNode = require('./nodeCalls');
-const firebase = require("./firebase_connect");
+const firebase = require("./firebase/firebase_connect");
 
 
 // with ES Modules (if using client-side JS, like React)
