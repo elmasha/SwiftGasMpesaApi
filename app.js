@@ -5,27 +5,9 @@ const app = express();
 const cors = require('cors');
 const apiCallFromRequest = require('./Request')
 const apiCallFromNode = require('./nodeCalls');
-
-
-const firebase = require("firebase");
-require("firebase/firestore");
+const Ofirebase = require("./firebase/setData");
 
 // with ES Modules (if using client-side JS, like React)
-
-
-var firebaseConfig = {
-  apiKey: "AIzaSyDRtR2dTP3DQnMEDIPNTiyj_wrnmtbr168",
-  authDomain: "chapchapgas-2d104.firebaseapp.com",
-  databaseURL: "https://chapchapgas-2d104.firebaseio.com",
-  projectId: "chapchapgas-2d104",
-  storageBucket: "chapchapgas-2d104.appspot.com",
-  messagingSenderId: "706742017410",
-  appId: "1:706742017410:web:281eaf8dda6621a43e039b",
-  measurementId: "G-9FLZ4NS6F9"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig)
-const db = firebase.firestore()
 
 
 const port = app.listen(process.env.PORT || 4334);
@@ -157,6 +139,11 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
         res.json((req.body.Body.stkCallback.CallbackMetadata.Item[0].Value))
+        console.log()
+
+        Ofirebase.stk_callback(req.body,function(err,data){
+            res.send(data);
+        });
         
         amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
         transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
@@ -180,18 +167,6 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
 
         
 
-
-        db.collection("Payments_backup").add({
-            TransID : transID ,
-            TransAmount : amount ,
-            TransNo : transNo ,
-            CheckoutRequestID : _checkoutRequestId2,
-            Timestamp : transdate
-        }).then((ref) => {
-            console.log("Added doc with ID: ", ref.id);
-        });
-
-    
         
     }else if(res.status(404)){
         res.json((req.body))
