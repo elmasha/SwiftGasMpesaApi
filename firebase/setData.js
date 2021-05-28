@@ -7,10 +7,10 @@ var userName = '';
 module.exports ={
     stk_callback: function(req,callback){
 
-        amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
-        transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
-        transNo = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
-        transdate = req.body.Body.stkCallback.CallbackMetadata.Item[2].Value;
+        amount = req.Body.stkCallback.CallbackMetadata.Item[0].Value;
+        transID = req.Body.stkCallback.CallbackMetadata.Item[1].Value;
+        transNo = req.Body.stkCallback.CallbackMetadata.Item[3].Value;
+        transdate = req.Body.stkCallback.CallbackMetadata.Item[2].Value;
       
         firebase.collection("Payments_backup").add({
             TransID : transID ,
