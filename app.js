@@ -17,6 +17,8 @@ app.use(cors())
 app.use(express.json())
 app.use(express.static('public'));
 
+var userName = '';
+
 
 
 
@@ -137,7 +139,6 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
     var amount = '';
     var transdate = '';
     var transNo = '';
-    var userName = '';
 
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
@@ -157,7 +158,7 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         console.log("Transaction",transNo)
         console.log("TransactionTime",transdate)
 
-        Ofirebase.stk_callback(req.body,function(err,data){
+        Ofirebase.stk_callback(req.body,userName,function(err,data){
            return res.send(data);
         })
 

@@ -4,7 +4,7 @@ var amount = '';
 var transdate = '';
 var transNo = '';
 module.exports ={
-    stk_callback: function(req,callback){
+    stk_callback: function(req,userName,callback){
 
         amount = req.Body.stkCallback.CallbackMetadata.Item[0].Value;
         transID = req.Body.stkCallback.CallbackMetadata.Item[1].Value;
