@@ -80,6 +80,28 @@ app.post('/stk', access, _urlencoded,function(req,res){
      order_ID = req.body.orderID;
      _lat = req.body.lat;
      _lng = req.body.lng;
+     _category = req.body.Category;
+     _price = req.body.Price;
+     _customer_name = req.body.Customer_name;
+     _customer_no = req.body.Customer_No;
+     _user_id = req.body.User_id;
+     _vendor_name = req.body.Vendor_Name;
+     _vendor_id = req.body.Vendor_ID;
+     _name = req.body.Name;
+     _item_image = req.body.Item_image;
+     _item_desc = req.body.Item_desc;
+     _order_status = req.body.Order_status;
+     _payment_method = req.body.Payment_method;
+     _quantity = req.body.Quantity;
+     _rated = req.body.Rated;
+     _shop_name = req.body.Shop_Name;
+     _shop_no = req.body.Shop_No;
+     _user_image = req.body.User_image;
+     
+
+
+
+      
 
 
     let endpoint = " https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
@@ -97,6 +119,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
     console.log("orderID",order_ID)
     console.log("lat",_lat)
     console.log("lng",_lng)
+    console.log("UID",_user_id)
 
     
       
@@ -157,6 +180,7 @@ const middleware = (req, res, next) => {
 
     req.name = order_ID;
     req.checkoutID = _checkoutRequestId2;
+    req.uid = _user_id;
     next();
   };
   
@@ -170,6 +194,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
     var transdate = '';
     var transNo = '';
     let id = req.name;
+    let Userid = req.uid;
     let _checkoutID = req.checkoutID;
 
     console.log('.......... STK Callback ..................');
@@ -200,11 +225,21 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             paidAmount : amount,
             transNo : transNo ,
             Doc_ID: id,
-            chechOutReqID : _checkoutID,
+            checkOutReqID : _checkoutID,
             user_Name: userName,
             timestamp : transdate,
+            User_id : Userid,
         }).then((ref) => {
             console.log("Added doc with ID: ", transID);
+        });
+
+
+        db.collection("Order_request").doc(id).set({
+            mpesaReceipt : transID ,
+            doc_id: id,
+            User_id : Userid,
+        }).then((ref) => {
+            console.log("Order added doc with ID: ", id);
         });
         
     }else if(res.status(404)){
