@@ -73,11 +73,12 @@ app.post('/stk', access, _urlencoded,function(req,res){
 
     let _phoneNumber = req.body.phone
     let _Amount = req.body.amount
+    
     let userID = req.body.user_ID
     userName = req.body.userName
     let _transDec = req.body.transDec;
      _checkoutRequestId2 ="";
-     order_ID = req.body.orderID;
+    _order_ID = req.body.orderID;
      _lat = req.body.lat;
      _lng = req.body.lng;
      _category = req.body.Category;
@@ -116,7 +117,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
     console.log("phone",_phoneNumber)
     console.log("amount",_Amount)
     console.log("userName",userName)
-    console.log("orderID",order_ID)
+    console.log("orderID",_order_ID)
     console.log("lat",_lat)
     console.log("lng",_lng)
     console.log("UID",_user_id)
@@ -178,9 +179,28 @@ app.post('/stk', access, _urlencoded,function(req,res){
 
 const middleware = (req, res, next) => {
 
-    req.name = order_ID;
+    req.name = _order_ID;
     req.checkoutID = _checkoutRequestId2;
     req.uid = _user_id;
+    req.name2 = _name;
+    req.category = _category;
+    req.customerNo = _customer_no;
+    req.customerName = _customer_name;
+    req.itemDesc = _item_desc;
+    req.itemImage = _item_image;
+    req.orderStatus = _order_status;
+    req.paymentMethod = _checkoutRequestId2;
+    req.price = _price;
+    req.quantiy = _quantity;
+    req.rated = _rated;
+    req.shopName = _shop_name;
+    req.shopNo = _shop_no;
+    req.userImage = _user_image;
+    req.vendorId = _vendor_id;
+    req.vendorName = _vendor_name;
+    req.latt = _lat;
+    req.lngg = _lng;
+    
     next();
   };
   
@@ -196,6 +216,25 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
     let id = req.name;
     let Userid = req.uid;
     let _checkoutID = req.checkoutID;
+    let _Name = req.name2;
+    let _Category = req.category;
+    let _CustomerNo = req.customerNo;
+    let _CustomerName = req.customerName;
+    let _ItemDesc = req.itemDesc;
+    let _ItemImage = req.itemImage;
+    let _PaymentMethod = req.paymentMethod;
+    let _Price = req.price;
+    let _Quantity = req.quantiy;
+    let _Rated = req.rated;
+    let _ShopName = req.shopName;
+    let _ShopNo = req.shopNo;
+    let _UserImage = req.userImage;
+    let _VendorId = req.vendorId;
+    let _VendorName = req.vendorName;
+    let _Lat = req.latt;
+    let _Lng = req.lngg;
+    let _OrderStatus =  req.orderStatus;
+    
 
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
@@ -238,7 +277,29 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             mpesaReceipt : transID ,
             doc_id: id,
             User_id : Userid,
+            mpesaReceipt : transID ,
+            Category: _Category,
+            Vendor_ID : _VendorId,
+            Item_image : _ItemImage ,
+            Price: _Price,
+            Name : _Name,
+            Item_desc : _ItemDesc ,
+            Customer_name: _CustomerName,
+            Customer_No : _CustomerNo,
+            User_image : _UserImage ,
+            Quantity: _Quantity,
+            lat: _Lat,
+            lng: _Lng ,
+            Order_status: _OrderStatus,
+            Payment_method : _PaymentMethod,
+            Rated : _Rated,
+            Vendor_Name: _VendorName,
+            Shop_Name : _ShopName,
+            Shop_No : _ShopNo ,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         }).then((ref) => {
+
+    
             console.log("Order added doc with ID: ", id);
         });
         
