@@ -62,7 +62,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
     let _phoneNumber = req.body.phone
     let _Amount = req.body.amount
     let userID = req.body.user_ID
-    let userName = req.body.userName
+    userName = req.body.userName
     let _transDec = req.body.transDec;
     let _checkoutRequestId2 ="";
 
@@ -158,8 +158,8 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         console.log("Transaction",transNo)
         console.log("TransactionTime",transdate)
 
-        Ofirebase.stk_callback(req.body,userName,function(err,data){
-           return res.send(data);
+        Ofirebase.stk_callback(req.body,function(err,data,userName){
+           return res.send(data,userName);
         })
 
         
