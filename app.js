@@ -23,8 +23,10 @@ app.use(express.static('public'));
 app.use(flash());
 
 
-var userName = '';
-let order_ID
+    var userName = '';
+    let _checkoutRequestId2 ="";
+    let order_ID
+
 
 
 
@@ -73,7 +75,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
     let userID = req.body.user_ID
     userName = req.body.userName
     let _transDec = req.body.transDec;
-    let _checkoutRequestId2 ="";
+     _checkoutRequestId2 ="";
      order_ID = req.body.orderID;
 
 
@@ -149,6 +151,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
 const middleware = (req, res, next) => {
     console.log("test1");
     req.name = order_ID;
+    req.checkoutID = _checkoutRequestId2;
     next();
   };
   
@@ -162,6 +165,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
     var transdate = '';
     var transNo = '';
     let id = req.name;
+    let _checkoutID = req.checkoutID;
 
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
@@ -192,6 +196,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             paidAmount : amount,
             transNo : transNo ,
             Doc_ID: id,
+            chechOutReqID : _checkoutID,
             user_Name: userName,
             timestamp : transdate,
         }).then((ref) => {
