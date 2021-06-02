@@ -7,6 +7,7 @@ const apiCallFromRequest = require('./Request')
 const apiCallFromNode = require('./nodeCalls');
 const Ofirebase = require("./firebase/setData");
 var flash = require('connect-flash');
+var session = require('express-session')
 
 
 // with ES Modules (if using client-side JS, like React)
@@ -132,7 +133,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
                 res.status(200).json(body);
                
                 console.log(body);
-                req.flash('iD', order_ID)
+                req.session.flash('iD', order_ID)
                 res.redirect(`/stk_callback`)
 
             }
@@ -144,7 +145,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
 
 //-----Callback Url ----///
 app.post('/stk_callback',_urlencoded,function(req,res,next){
-     let id = req.flash('iD')
+     let id = req.session.flash('iD')
     const payarray = [];
     var transID ='';
     var amount = '';
