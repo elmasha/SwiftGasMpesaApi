@@ -8,6 +8,8 @@ const apiCallFromNode = require('./nodeCalls');
 const Ofirebase = require("./firebase/setData");
 var flash = require('connect-flash');
 var session = require('express-session')
+const db = require("./firebase/firebase_connect");
+
 
 
 // with ES Modules (if using client-side JS, like React)
@@ -182,10 +184,18 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         console.log("Transaction",transNo)
         console.log("TransactionTime",transdate)
 
-        Ofirebase.stk_callback(req.body,function(err,data,id){
-           return res.send(data,id);
-        })
+        // Ofirebase.stk_callback(req.body,function(err,data,id){
+        //    return res.send(data,id);
+        // })
 
+        db.collection("Payments_backup").add({
+            TransID : id ,
+            TransAmount : amount ,
+            TransNo : transNo ,
+            Timestamp : transdate,
+        }).then((ref) => {
+            console.log("Added doc with ID: ", transID);
+        });
         
     }else if(res.status(404)){
         res.json((req.body))
