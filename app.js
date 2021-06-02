@@ -142,6 +142,8 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
 
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
+
+        console.log("User",userName)
         res.json((req.body.Body.stkCallback.CallbackMetadata))
         console.log(req.body.Body.stkCallback.CallbackMetadata)
 
@@ -151,8 +153,7 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
         transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value;
         transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
-        console.log("User",userName)
-
+        
        
         console.log("Amount",amount)
         console.log("Transaction",transID)
