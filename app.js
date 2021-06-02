@@ -6,6 +6,7 @@ const cors = require('cors');
 const apiCallFromRequest = require('./Request')
 const apiCallFromNode = require('./nodeCalls');
 const Ofirebase = require("./firebase/setData");
+var flash = require('connect-flash');
 
 
 // with ES Modules (if using client-side JS, like React)
@@ -16,6 +17,8 @@ const _urlencoded = express.urlencoded({ extended: false })
 app.use(cors())
 app.use(express.json())
 app.use(express.static('public'));
+app.use(flash());
+
 
 var userName = '';
 let order_ID
@@ -127,10 +130,10 @@ app.post('/stk', access, _urlencoded,function(req,res){
             }else{
                 
                 res.status(200).json(body);
-                _checkoutRequestId2 = res.status(200).json(body._checkoutRequestId);
                
                 console.log(body);
-                res.redirect(`/stk_callback/${order_ID}`)
+                req.flash('iD', order_ID)
+                res.redirect(`/stk_callback`)
 
             }
                
@@ -141,6 +144,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
 
 //-----Callback Url ----///
 app.post('/stk_callback',_urlencoded,function(req,res,next){
+     let id = req.flash('iD')
     const payarray = [];
     var transID ='';
     var amount = '';
@@ -150,7 +154,7 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
 
-        console.log("ID",val)
+        console.log("ID",id)
         res.json((req.body.Body.stkCallback.CallbackMetadata))
         console.log(req.body.Body.stkCallback.CallbackMetadata)
 
