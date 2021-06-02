@@ -188,12 +188,12 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         // })
 
         db.collection("Payments_backup").doc(transID).set({
-            TransID : transID ,
-            TransAmount : amount ,
-            TransNo : transNo ,
-            Order_ID: id,
-            User_Name: userName,
-            Timestamp : transdate,
+            mpesaReceipt : transID ,
+            paidAmount : amount,
+            transNo : transNo ,
+            Doc_ID: id,
+            user_Name: userName,
+            timestamp : transdate,
         }).then((ref) => {
             console.log("Added doc with ID: ", transID);
         });
