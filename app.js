@@ -125,11 +125,9 @@ app.post('/stk', access, _urlencoded,function(req,res){
                 
                 res.status(200).json(body);
                 _checkoutRequestId2 = res.status(200).json(body._checkoutRequestId);
-                Ofirebase.saveData(req.body,function(err,data,userName){
-                    return res.send(data,userName);
-                 })
-         
+               
                 console.log(body);
+                res.redirect(`/stk_callback/${order_ID}`)
 
             }
                
@@ -145,11 +143,11 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
     var amount = '';
     var transdate = '';
     var transNo = '';
-
+    let val = req.params.order_ID
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
 
-        console.log("userName",userName)
+        console.log("ID",val)
         res.json((req.body.Body.stkCallback.CallbackMetadata))
         console.log(req.body.Body.stkCallback.CallbackMetadata)
 
@@ -166,8 +164,8 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
         console.log("Transaction",transNo)
         console.log("TransactionTime",transdate)
 
-        Ofirebase.stk_callback(req.body,function(err,data,userName){
-           return res.send(data,userName);
+        Ofirebase.stk_callback(req.body,function(err,data){
+           return res.send(data);
         })
 
         
