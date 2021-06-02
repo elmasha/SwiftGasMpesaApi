@@ -191,16 +191,11 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             TransID : transID ,
             TransAmount : amount ,
             TransNo : transNo ,
+            Order_ID: id,
+            User_Name: userName,
             Timestamp : transdate,
         }).then((ref) => {
             console.log("Added doc with ID: ", transID);
-        });
-
-
-        db.collection("Order_request").doc(id).update({
-            Mpesa_ID : transID,
-        }).then((ref) => {
-            console.log("Order updated with ID: ", transID);
         });
         
     }else if(res.status(404)){
