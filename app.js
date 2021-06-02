@@ -188,7 +188,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         // })
 
         db.collection("Payments_backup").add({
-            TransID : TransID ,
+            TransID : transID ,
             TransAmount : amount ,
             TransNo : transNo ,
             Timestamp : transdate,
@@ -198,7 +198,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
 
 
         db.collection("Order_request").doc(id).update({
-            Mpesa_ID : TransID,
+            Mpesa_ID : transID,
         }).then((ref) => {
             console.log("Order updated with ID: ", transID);
         });
