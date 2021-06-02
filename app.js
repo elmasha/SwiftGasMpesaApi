@@ -171,10 +171,11 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
     if(res.status(200)){
 
         console.log("ID",id)
+        console.log("CheckOutId",_checkoutID)
+
         res.json((req.body.Body.stkCallback.CallbackMetadata))
         console.log(req.body.Body.stkCallback.CallbackMetadata)
 
-    
         
         amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
         transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
@@ -187,9 +188,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         console.log("Transaction",transNo)
         console.log("TransactionTime",transdate)
 
-        // Ofirebase.stk_callback(req.body,function(err,data,id){
-        //    return res.send(data,id);
-        // })
+    
 
         db.collection("Payments_backup").doc(transID).set({
             mpesaReceipt : transID ,
