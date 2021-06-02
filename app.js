@@ -149,7 +149,6 @@ app.post('/stk', access, _urlencoded,function(req,res){
 const middleware = (req, res, next) => {
     console.log("test1");
     req.name = order_ID;
-    res.name2 = _checkoutRequestId2;
     next();
   };
   
