@@ -187,7 +187,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         //    return res.send(data,id);
         // })
 
-        db.collection("Payments_backup").doc(id).set({
+        db.collection("Payments_backup").doc(transID).set({
             TransID : transID ,
             TransAmount : amount ,
             TransNo : transNo ,
