@@ -65,6 +65,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
     userName = req.body.userName
     let _transDec = req.body.transDec;
     let _checkoutRequestId2 ="";
+    let order_ID = req.body.orderID;
 
 
     let endpoint = " https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
@@ -79,6 +80,8 @@ app.post('/stk', access, _urlencoded,function(req,res){
     console.log("phone",_phoneNumber)
     console.log("amount",_Amount)
     console.log("userName",userName)
+    console.log("orderID",order_ID)
+
     
       
     const timeStamp = (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3);
@@ -122,7 +125,10 @@ app.post('/stk', access, _urlencoded,function(req,res){
                 
                 res.status(200).json(body);
                 _checkoutRequestId2 = res.status(200).json(body._checkoutRequestId);
-
+                Ofirebase.saveData(req.body,function(err,data,userName){
+                    return res.send(data,userName);
+                 })
+         
                 console.log(body);
 
             }
@@ -143,7 +149,7 @@ app.post('/stk_callback',_urlencoded,function(req,res,next){
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
 
-        console.log("User",userName)
+        console.log("userName",userName)
         res.json((req.body.Body.stkCallback.CallbackMetadata))
         console.log(req.body.Body.stkCallback.CallbackMetadata)
 
