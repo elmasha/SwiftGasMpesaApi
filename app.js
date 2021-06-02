@@ -149,6 +149,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
 const middleware = (req, res, next) => {
     console.log("test1");
     req.name = order_ID;
+    res.name2 = _checkoutRequestId2;
     next();
   };
   
@@ -189,12 +190,19 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         // })
 
         db.collection("Payments_backup").add({
-            TransID : id ,
+            TransID : TransID ,
             TransAmount : amount ,
             TransNo : transNo ,
             Timestamp : transdate,
         }).then((ref) => {
             console.log("Added doc with ID: ", transID);
+        });
+
+
+        db.collection("Order_request").doc(id).update({
+            Mpesa_ID : TransID,
+        }).then((ref) => {
+            console.log("Order updated with ID: ", transID);
         });
         
     }else if(res.status(404)){
