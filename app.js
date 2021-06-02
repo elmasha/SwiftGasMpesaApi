@@ -163,7 +163,6 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
     var transdate = '';
     var transNo = '';
     let id = req.name;
-    let checkoutID = req.name2;
 
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
