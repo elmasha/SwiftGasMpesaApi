@@ -4,7 +4,7 @@ var amount = '';
 var transdate = '';
 var transNo = '';
 module.exports ={
-    stk_callback: function(req,userName,callback){
+    stk_callback: function(req,callback){
 
         amount = req.Body.stkCallback.CallbackMetadata.Item[0].Value;
         transID = req.Body.stkCallback.CallbackMetadata.Item[1].Value;
@@ -23,4 +23,21 @@ module.exports ={
             console.log("Added doc with ID: ", transID);
         });
     }
+
+  
+
 }
+
+// module.exports ={
+//     saveData: function (req,callback){
+//         firebase.collection("Payments_backup").add({
+//             TransID : transID ,
+//             TransAmount : amount ,
+//             TransNo : transNo ,
+//             UserName : userName,
+//             Timestamp : transdate,
+//         }).then((ref) => {
+//             console.log("Added doc with ID: ", transID);
+//         });
+//     }
+// }
