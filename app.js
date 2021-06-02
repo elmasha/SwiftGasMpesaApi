@@ -24,8 +24,9 @@ app.use(flash());
 
 
     var userName = '';
-    let _checkoutRequestId2 ="";
-    let order_ID
+    let _checkoutRequestId2;
+    let order_ID;
+    let _category,_customer_no,_customer_name,_item_desc ,_item_image,_name,_order_status,_payment_method,_price,_quantity,_rated,_shop_name,_shop_no,_user_id,_user_image,_vendor_id,_vendor_name,_doc_id,_lat,_lng;
 
 
 
@@ -69,6 +70,210 @@ app.get('/access_token',access,(req,res)=>{
 
 ///----Stk Push ---//
 app.post('/stk', access, _urlencoded,function(req,res){
+
+    let _phoneNumber = req.body.phone
+    let _Amount = req.body.amount
+    let userID = req.body.user_ID
+    userName = req.body.userName
+    let _transDec = req.body.transDec;
+     _checkoutRequestId2 ="";
+     order_ID = req.body.orderID;
+     _lat = req.body.lat;
+     _lng = req.body.lng;
+
+
+    let endpoint = " https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+    let auth = "Bearer "+ req.access_token
+
+    let _shortCode = '4069571';
+    let _passKey = '8e2d5d66120bfb538400be31f2fa885e90ef3acb5bc037454bbf23223fcb394a'
+   
+
+
+
+    console.log("phone",_phoneNumber)
+    console.log("amount",_Amount)
+    console.log("userName",userName)
+    console.log("orderID",order_ID)
+    console.log("lat",_lat)
+    console.log("lng",_lng)
+
+    
+      
+    const timeStamp = (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3);
+    const password = 
+    Buffer.from(`${_shortCode}${_passKey}${timeStamp}`).toString('base64');
+
+    request(
+        {
+            url:endpoint,
+            method:"POST",
+            headers:{
+                "Authorization": auth
+            },
+    
+        json:{
+    
+                    "BusinessShortCode": "4069571",
+                    "Password": password,
+                    "Timestamp": timeStamp,
+                    "TransactionType": "CustomerPayBillOnline",
+                    "Amount": _Amount,
+                    "PartyA": _phoneNumber,
+                    "PartyB": "4069571", //Till  No.
+                    "PhoneNumber": _phoneNumber,
+                    "CallBackURL": "https://gasmpesa.herokuapp.com/stk_callback",
+                    "AccountReference": "SwiftGas digital Merchants",
+                    "TransactionDesc": _transDec
+
+            }
+
+        },
+       (error,response,body)=>{
+
+            if(error){
+
+                
+                console.log(error);
+                res.status(404).json(error);
+
+            }else{
+                
+                res.status(200).json(body);
+                _checkoutRequestId2 = body.CheckoutRequestID;
+                console.log(body);
+                console.log(_checkoutRequestId2)
+                
+
+            }
+               
+
+        })
+
+});
+
+
+const middleware = (req, res, next) => {
+
+    req.name = order_ID;
+    req.checkoutID = _checkoutRequestId2;
+    next();
+  };
+  
+
+
+//-----Callback Url ----///
+app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
+    const payarray = [];
+    var transID ='';
+    var amount = '';
+    var transdate = '';
+    var transNo = '';
+    let id = req.name;
+    let _checkoutID = req.checkoutID;
+
+    console.log('.......... STK Callback ..................');
+    if(res.status(200)){
+
+        console.log("ID",id)
+        console.log("CheckOutId",_checkoutID)
+
+        res.json((req.body.Body.stkCallback.CallbackMetadata))
+        console.log(req.body.Body.stkCallback.CallbackMetadata)
+
+        
+        amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
+        transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
+        transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value;
+        transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
+        
+       
+        console.log("Amount",amount)
+        console.log("Transaction",transID)
+        console.log("Transaction",transNo)
+        console.log("TransactionTime",transdate)
+
+    
+
+        db.collection("Payments_backup").doc(transID).set({
+            mpesaReceipt : transID ,
+            paidAmount : amount,
+            transNo : transNo ,
+            Doc_ID: id,
+            chechOutReqID : _checkoutID,
+            user_Name: userName,
+            timestamp : transdate,
+        }).then((ref) => {
+            console.log("Added doc with ID: ", transID);
+        });
+        
+    }else if(res.status(404)){
+        res.json((req.body))
+        console.log(req.body.Body);
+    }
+
+    next()
+
+    })
+
+
+
+///----STK QUERY ---
+app.post('/stk/query',access,_urlencoded,function(req,res,next){
+
+    let _checkoutRequestId = req.body.checkoutRequestId
+
+    auth = "Bearer "+ req.access_token
+
+    let endpoint =' https://api.safaricom.co.ke/mpesa/stkpushquery/v1/query'
+    const _shortCode = '4069571'
+    const _passKey = '8e2d5d66120bfb538400be31f2fa885e90ef3acb5bc037454bbf23223fcb394a'
+    const timeStamp = (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3)
+    const password = Buffer.from(`${_shortCode}${_passKey}${timeStamp}`).toString('base64')
+    
+
+    request(
+        {
+            url:endpoint,
+            method:"POST",
+            headers:{
+                "Authorization": auth
+            },
+           
+        json:{
+    
+            'BusinessShortCode': _shortCode,
+            'Password': password,
+            'Timestamp': timeStamp,
+            'CheckoutRequestID': _checkoutRequestId
+
+            }
+
+        },
+        function(error,response,body){
+
+            if(error){
+
+                console.log(error);
+                res.status(404).json(body);
+
+            }else{
+                res.status(200).json(body)
+                console.log(body)
+                next()
+            }
+
+        })
+
+})
+
+
+
+
+/////------DEPOSIT MPESA STK --------///
+
+///----Stk Push ---//
+app.post('/stkDeposit', access, _urlencoded,function(req,res){
 
     let _phoneNumber = req.body.phone
     let _Amount = req.body.amount
@@ -148,8 +353,8 @@ app.post('/stk', access, _urlencoded,function(req,res){
 });
 
 
-const middleware = (req, res, next) => {
-    console.log("test1");
+const middleware2 = (req, res, next) => {
+
     req.name = order_ID;
     req.checkoutID = _checkoutRequestId2;
     next();
@@ -158,7 +363,7 @@ const middleware = (req, res, next) => {
 
 
 //-----Callback Url ----///
-app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
+app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
     const payarray = [];
     var transID ='';
     var amount = '';
@@ -213,11 +418,8 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
 
 
 
-
-
-
 ///----STK QUERY ---
-app.post('/stk/query',access,_urlencoded,function(req,res,next){
+app.post('/stkDeposit/query',access,_urlencoded,function(req,res,next){
 
     let _checkoutRequestId = req.body.checkoutRequestId
 
@@ -264,8 +466,6 @@ app.post('/stk/query',access,_urlencoded,function(req,res,next){
         })
 
 })
-
-
 
 
 
