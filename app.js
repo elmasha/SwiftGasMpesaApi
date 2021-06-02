@@ -131,10 +131,8 @@ app.post('/stk', access, _urlencoded,function(req,res){
             }else{
                 
                 res.status(200).json(body);
-               
                 console.log(body);
-                req.session.flash('iD', order_ID)
-                res.redirect(`/stk_callback`)
+                
 
             }
                
@@ -143,15 +141,23 @@ app.post('/stk', access, _urlencoded,function(req,res){
 
 });
 
+
+const middleware = (req, res, next) => {
+    console.log("test1");
+    req.name = order_ID;
+    next();
+  };
+  
+
+
 //-----Callback Url ----///
-app.post('/stk_callback',_urlencoded,function(req,res,next){
-     let id = req.session.flash('iD')
+app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
     const payarray = [];
     var transID ='';
     var amount = '';
     var transdate = '';
     var transNo = '';
-    let val = req.params.order_ID
+    let id = req.name;
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
 
