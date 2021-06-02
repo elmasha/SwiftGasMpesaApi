@@ -18,6 +18,7 @@ app.use(express.json())
 app.use(express.static('public'));
 
 var userName = '';
+let order_ID
 
 
 
@@ -34,6 +35,8 @@ app.use((req, res, next) => {
         res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
         return res.status(200).json({});
     }
+
+    res.locals.top = order_ID;
     next();
   });
 
@@ -65,7 +68,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
     userName = req.body.userName
     let _transDec = req.body.transDec;
     let _checkoutRequestId2 ="";
-    let order_ID = req.body.orderID;
+     order_ID = req.body.orderID;
 
 
     let endpoint = " https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
