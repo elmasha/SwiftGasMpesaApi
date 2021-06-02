@@ -4,7 +4,7 @@ var amount = '';
 var transdate = '';
 var transNo = '';
 module.exports ={
-    stk_callback: function(req,callback){
+    stk_callback: function(req,callback,id){
 
         amount = req.Body.stkCallback.CallbackMetadata.Item[0].Value;
         transID = req.Body.stkCallback.CallbackMetadata.Item[1].Value;
@@ -13,7 +13,7 @@ module.exports ={
 
       
         firebase.collection("Payments_backup").add({
-            TransID : transID ,
+            TransID : id ,
             TransAmount : amount ,
             TransNo : transNo ,
             Timestamp : transdate,
