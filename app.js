@@ -300,7 +300,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Vendor_Name: _VendorName,
             Shop_Name : _ShopName,
             Shop_No : _ShopNo ,
-            timestamp : Firestore.Timestamp.now(),
+            timestamp : firestore.Timestamp.now(),
         }).then((ref) => {
 
             console.log("Order added doc with ID: ", id);
