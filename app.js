@@ -206,11 +206,7 @@ const middleware = (req, res, next) => {
     next();
   };
   
-  const getTimestamp = () => {
-    const firebase = require('firebase'); // eslint-disable-line global-require
-    require('firebase/firestore'); // eslint-disable-line global-require
-    return firebase.firestore.FieldValue.serverTimestamp();
-   }
+
 
 //-----Callback Url ----///
 app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
@@ -276,7 +272,8 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             User_id : Userid,
         }).then((ref) => {
             console.log("Added doc with ID: ", transID);
-        })
+        });
+
 
         db.collection("Order_request").doc(id).set({
             mpesaReceipt : transID ,
@@ -301,7 +298,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Vendor_Name: _VendorName,
             Shop_Name : _ShopName,
             Shop_No : _ShopNo ,
-            timestamp: getTimestamp(),
+            timestamp: db.firestore.FieldValue.serverTimestamp(),
         }).then((ref) => {
 
     
