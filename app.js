@@ -423,7 +423,7 @@ app.post('/stkDeposit', access, _urlencoded,function(req,res){
                     "Password": password,
                     "Timestamp": timeStamp,
                     "TransactionType": "CustomerPayBillOnline",
-                    "Amount": _Amount,
+                    "Amount": _amount,
                     "PartyA": _phoneNumber,
                     "PartyB": "4069571", //Till  No.
                     "PhoneNumber": _phoneNumber,
