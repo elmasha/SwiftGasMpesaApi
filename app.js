@@ -517,7 +517,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
     
         let totalamount = _balance + _Deposit;
         let previous = totalamount;
-        let currebalance = _balance;
+        let currentbalance = _balance;
         var batch = db.batch();
 
         var boost = db.collection("MGas_Client").doc(id);
@@ -525,6 +525,43 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
 
         batch.commit().then((ref) =>{
             console.log("Batch complete: ", transID);
+
+
+
+// Create a reference to the SF doc.
+var sfDocRef = db.collection("Wallet_Transaction").doc(_Paymentid);
+
+// Uncomment to initialize the doc.
+// sfDocRef.set({ population: 0 });
+
+return db.runTransaction((transaction) => {
+    // This code may get re-run multiple times if there are conflicts.
+    return transaction.get(sfDocRef).then((sfDoc) => {
+        if (!sfDoc.exists) {
+            throw "Document does not exist!";
+        }
+        transaction.set(sfDocRef, { 
+        "accountNO": _AccountNo,
+        "transaction_type":_Transtype,
+        "transaction_desc":_Transadesc,
+        "amount":_amountt,
+        "previousAmount":previous,
+        "currentBalance":currentbalance,
+        "timestamp": new Date(),
+        "Payment_ID":_Paymentid,
+        "User_Id":id,
+         });
+
+    });
+}).then(() => {
+    console.log("Transaction successfully committed!");
+}).catch((error) => {
+    console.log("Transaction failed: ", error);
+});
+
+
+
+
         });
 
         
