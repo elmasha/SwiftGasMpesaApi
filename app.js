@@ -9,6 +9,7 @@ const Ofirebase = require("./firebase/setData");
 var flash = require('connect-flash');
 var session = require('express-session')
 const db = require("./firebase/firebase_connect");
+const Timestamp = require('firebase-firestore-timestamp');
 
 
 
@@ -299,7 +300,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Vendor_Name: _VendorName,
             Shop_Name : _ShopName,
             Shop_No : _ShopNo ,
-            timestamp: db.firestore.Timestamp.fromDate(new Date("December 23,1993")),
+            timestamp:Timestamp,
         }).then((ref) => {
 
     

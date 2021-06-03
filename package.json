@@ -27,6 +27,7 @@
     "express-session": "^1.17.2",
     "firebase": "^8.6.1",
     "firebase-admin": "^9.8.0",
+    "firebase-firestore-timestamp": "^1.0.4",
     "heroku": "^7.52.0",
     "mongoose": "^5.12.0",
     "nodemon": "^2.0.4",
