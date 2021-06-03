@@ -9,7 +9,6 @@ const Ofirebase = require("./firebase/setData");
 var flash = require('connect-flash');
 var session = require('express-session')
 const db = require("./firebase/firebase_connect");
-const Timestamp = require('firebase-firestore-timestamp');
 
 
 
@@ -299,7 +298,8 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Rated : _Rated,
             Vendor_Name: _VendorName,
             Shop_Name : _ShopName,
-            Shop_No : _ShopNo,
+            Shop_No : _ShopNo ,
+            timestamp: "",
         }).then((ref) => {
 
     
