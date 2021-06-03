@@ -236,6 +236,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
     let _Lat = req.latt;
     let _Lng = req.lngg;
     let _OrderStatus =  req.orderStatus;
+    let _Timestamp = req.timestampp;
     
 
     console.log('.......... STK Callback ..................');
@@ -298,7 +299,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Vendor_Name: _VendorName,
             Shop_Name : _ShopName,
             Shop_No : _ShopNo ,
-            timestamp: db.firestore.FieldValue.serverTimestamp(),
+            timestamp: _Timestamp,
         }).then((ref) => {
 
     
