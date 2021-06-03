@@ -277,7 +277,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         let _timeStamp = Date.now();
 
         db.collection("Order_request").doc(id).set({
-            mpesaReceipt : transID ,
+            mpesaReceipt : transID,
             doc_id: id,
             User_id : Userid,
             mpesaReceipt : transID ,
@@ -285,8 +285,8 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Vendor_ID : _VendorId,
             Item_image : _ItemImage ,
             Price: _Price,
-            Name : _Name,
-            Item_desc : _ItemDesc ,
+            Name: _Name,
+            Item_desc : _ItemDesc,
             Customer_name: _CustomerName,
             Customer_No : _CustomerNo,
             User_image : _UserImage ,
@@ -299,10 +299,9 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Vendor_Name: _VendorName,
             Shop_Name : _ShopName,
             Shop_No : _ShopNo ,
-            timestamp: "",
+            timestamp : _timeStamp,
         }).then((ref) => {
 
-    
             console.log("Order added doc with ID: ", id);
         });
         
