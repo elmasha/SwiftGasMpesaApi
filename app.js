@@ -201,7 +201,6 @@ const middleware = (req, res, next) => {
     req.vendorName = _vendor_name;
     req.latt = _lat;
     req.lngg = _lng;
-    req.timestampp = _time_stamp;
     
     next();
   };
@@ -236,7 +235,6 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
     let _Lat = req.latt;
     let _Lng = req.lngg;
     let _OrderStatus =  req.orderStatus;
-    let _Timestamp = req.timestampp;
     
 
     console.log('.......... STK Callback ..................');
