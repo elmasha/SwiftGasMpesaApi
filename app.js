@@ -562,14 +562,6 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
 
 
 
-   
-
-
-
-
-// Create a reference to the SF doc.
-var sfDocRef = db.collection("").doc(_Paymentid);
-
 
 ///----STK QUERY ---
 app.post('/stkDeposit/query',access,_urlencoded,function(req,res,next){
