@@ -30,7 +30,7 @@ app.use(flash());
 
 ///-----Wallet varible ----////
 
-let _username , _accountno,_transactiontype,_transactiondesc,_amount ,_previousamout,_currentbalance,_paymentid,_userid,_checkoutRequestId5,_balance;
+let _username , _accountno,_transactiontype,_transactiondesc,_amount ,_previousamout,_currentbalance,_paymentid,_userid,_checkoutRequestId5,_balance,_deposit;
 
 
 
@@ -386,6 +386,7 @@ app.post('/stkDeposit', access, _urlencoded,function(req,res){
      _transactiondesc = req.body.transaction_desc;
      _previousamout = req.body.previousAmount;
      _balance = req.body.balance;
+     _deposit = req.body.deposit;
 
 
 
@@ -466,7 +467,8 @@ const middleware2 = (req, res, next) => {
     req.transactiondesc = _transactiondesc
     req.amounT = _amount;
     req.previousamount = _previousamout;
-    req.userid = _userid; 
+    req.userid = _userid;
+    req.depositt = _deposit; 
     next();
   };
   
@@ -488,6 +490,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
     let _amountt = req.amounT;
     let _Previousamout = req.previousamount
     let _Paymentid = req.payid;
+    let _Deposit = req.depositt;
 
 
     console.log('.......... STK Callback ..................');
@@ -512,7 +515,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
         console.log("TransactionTime",transdate)
 
     
-        let totalamount = _balance + _amount;
+        let totalamount = _balance + _Deposit;
         let previous = totalamount;
         let currebalance = _balance;
         var batch = db.batch();
