@@ -274,8 +274,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         });
 
 
-        let today = new Date();
-        let _timeStamp = today.valueOf();
+        let _timeStamp = db.FieldValue.serverTimestamp();
 
         db.collection("Order_request").doc(id).set({
             mpesaReceipt : transID,
@@ -300,7 +299,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Vendor_Name: _VendorName,
             Shop_Name : _ShopName,
             Shop_No : _ShopNo ,
-            timestamp : firestore.Timestamp.now(),
+            timestamp : _timeStamp,
         }).then((ref) => {
 
             console.log("Order added doc with ID: ", id);
