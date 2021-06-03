@@ -299,7 +299,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Vendor_Name: _VendorName,
             Shop_Name : _ShopName,
             Shop_No : _ShopNo ,
-            timestamp: _timeStamp,
+            timestamp: firebase.firestore.Timestamp.fromDate(new Date("December 23,1993")),
         }).then((ref) => {
 
     
