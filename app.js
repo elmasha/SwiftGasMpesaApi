@@ -22,13 +22,15 @@ app.use(express.json())
 app.use(express.static('public'));
 app.use(flash());
 
-
+//----Order Variable----/////
     var userName = '';
     let _checkoutRequestId2;
     let order_ID;
     let _category,_customer_no,_customer_name,_item_desc ,_item_image,_name,_order_status,_payment_method,_price,_quantity,_rated,_shop_name,_shop_no,_user_id,_user_image,_vendor_id,_vendor_name,_time_stamp,_lat,_lng;
 
+///-----Wallet varible ----////
 
+let _username , _accountno,_transactiontype,_transactiondesc,_amount ,_previousamout,_currentbalance,_paymentid,_userid,_checkoutRequestId5,_balance;
 
 
 
@@ -372,13 +374,19 @@ app.post('/stk/query',access,_urlencoded,function(req,res,next){
 ///----Stk Push ---//
 app.post('/stkDeposit', access, _urlencoded,function(req,res){
 
-    let _phoneNumber = req.body.phone
-    let _Amount = req.body.amount
-    let userID = req.body.user_ID
-    userName = req.body.userName
+    let _phoneNumber = req.body.phone;
+     _amount = req.body.amount;
+     _userid = req.body.user_ID;
+    _username = req.body.User_name;
     let _transDec = req.body.transDec;
-     _checkoutRequestId2 ="";
-     order_ID = req.body.orderID;
+     _checkoutRequestId5 = req.body.checkReqId;
+     _paymentid = req.body.Payment_ID;
+     _accountno = req.body.accountNO;
+     _transactiontype = req.body.transaction_type;
+     _transactiondesc = req.body.transaction_desc;
+     _previousamout = req.body.previousAmount;
+     _balance = req.body.balance;
+
 
 
     let endpoint = " https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
@@ -391,9 +399,9 @@ app.post('/stkDeposit', access, _urlencoded,function(req,res){
 
 
     console.log("phone",_phoneNumber)
-    console.log("amount",_Amount)
-    console.log("userName",userName)
-    console.log("orderID",order_ID)
+    console.log("amount",_amount)
+    console.log("userName",_)
+    console.log("orderID",_paymentid)
 
     
       
@@ -419,7 +427,7 @@ app.post('/stkDeposit', access, _urlencoded,function(req,res){
                     "PartyA": _phoneNumber,
                     "PartyB": "4069571", //Till  No.
                     "PhoneNumber": _phoneNumber,
-                    "CallBackURL": "https://gasmpesa.herokuapp.com/stk_callback",
+                    "CallBackURL": "https://gasmpesa.herokuapp.com/stk_callbackDeposit",
                     "AccountReference": "SwiftGas digital Merchants",
                     "TransactionDesc": _transDec
 
@@ -451,9 +459,15 @@ app.post('/stkDeposit', access, _urlencoded,function(req,res){
 
 
 const middleware2 = (req, res, next) => {
-
-    req.name = order_ID;
-    req.checkoutID = _checkoutRequestId2;
+    req.payid = _paymentid;
+    req.checkoutID = _checkoutRequestId5;
+    req.username = _paymentid;
+    req.accountno = _accountno;
+    req.transactiontype = _transactiontype;
+    req.transactiondesc = _transactiondesc
+    req.amounT = _amount;
+    req.previousamount = _previousamout;
+    req.userid = _userid; 
     next();
   };
   
@@ -466,8 +480,16 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
     var amount = '';
     var transdate = '';
     var transNo = '';
-    let id = req.name;
+    let id = req.userid;
     let _checkoutID = req.checkoutID;
+    let _Username = req.username;
+    let _AccountNo = req.accountno;
+    let _Transtype = req.transactiontype;
+    let _Transadesc = req.transactiondesc;
+    let _amountt = req.amounT;
+    let _Previousamout = req.previousamount
+    let _Paymentid = req.payid;
+
 
     console.log('.......... STK Callback ..................');
     if(res.status(200)){
@@ -491,18 +513,18 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
         console.log("TransactionTime",transdate)
 
     
+        let totalamount = _balance + _amount;
+        let previous = totalamount;
+        let currebalance = _balance;
+        var batch = db.batch();
 
-        db.collection("Payments_backup").doc(transID).set({
-            mpesaReceipt : transID ,
-            paidAmount : amount,
-            transNo : transNo ,
-            Doc_ID: id,
-            chechOutReqID : _checkoutID,
-            user_Name: userName,
-            timestamp : transdate,
-        }).then((ref) => {
-            console.log("Added doc with ID: ", transID);
+        var boost = db.collection("MGas_Client").doc(id);
+        batch.update(boost,{"Swift_wallet":totalamount});
+
+        batch.commit().then((ref) =>{
+            console.log("Batch complete: ", transID);
         });
+
         
     }else if(res.status(404)){
         res.json((req.body))
