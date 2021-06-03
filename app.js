@@ -521,13 +521,14 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
         var batch = db.batch();
 
         var boost = db.collection("MGas_Client").doc(id);
+        var boost2 = db.collection("Wallet_Transaction").doc(_Paymentid);
+
         batch.update(boost,{"Swift_wallet":totalamount});
 
         batch.commit().then((ref) =>{
             console.log("Batch complete: ", transID);
 
 
-            var boost2 = db.collection("Wallet_Transaction").doc(_Paymentid);
             batch.update(boost2,{ "accountNO": _AccountNo,
             "transaction_type":_Transtype,
             "transaction_desc":_Transadesc,
