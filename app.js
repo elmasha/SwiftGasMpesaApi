@@ -299,8 +299,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Rated : _Rated,
             Vendor_Name: _VendorName,
             Shop_Name : _ShopName,
-            Shop_No : _ShopNo ,
-            timestamp:Timestamp,
+            Shop_No : _ShopNo,
         }).then((ref) => {
 
     
