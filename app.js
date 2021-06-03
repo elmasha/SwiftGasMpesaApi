@@ -274,6 +274,8 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         });
 
 
+        let _timeStamp = Date.now();
+
         db.collection("Order_request").doc(id).set({
             mpesaReceipt : transID ,
             doc_id: id,
@@ -297,7 +299,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Vendor_Name: _VendorName,
             Shop_Name : _ShopName,
             Shop_No : _ShopNo ,
-            timestamp: "",
+            timestamp: _timeStamp,
         }).then((ref) => {
 
     
