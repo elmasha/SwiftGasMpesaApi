@@ -274,7 +274,8 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         });
 
 
-        let _timeStamp = Date.now();
+        let today = new Date();
+        let _timeStamp = today.valueOf();
 
         db.collection("Order_request").doc(id).set({
             mpesaReceipt : transID,
