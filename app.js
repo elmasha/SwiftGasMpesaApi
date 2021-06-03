@@ -274,7 +274,6 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         });
 
 
-        let _timeStamp = db.FieldValue.serverTimestamp();
 
         db.collection("Order_request").doc(id).set({
             mpesaReceipt : transID,
