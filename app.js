@@ -400,7 +400,7 @@ app.post('/stkDeposit', access, _urlencoded,function(req,res){
 
     console.log("phone",_phoneNumber)
     console.log("amount",_amount)
-    console.log("userName",_)
+    console.log("userName",_username)
     console.log("orderID",_paymentid)
 
     
