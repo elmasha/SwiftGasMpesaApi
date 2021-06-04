@@ -530,7 +530,7 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
        batch.commit().then((ref) =>{
            console.log("Batch complete: ", transID);
 
-           batch2.set(boost2,{ accountNO: _AccountNo,
+           batch2.set(boost2,{
             Name:  _PaymentName,
             Amount: _PayAmount,
             PhoneNo: _PayPhone,
