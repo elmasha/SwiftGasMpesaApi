@@ -536,7 +536,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
 
 return db.runTransaction((transaction) => {
     // This code may get re-run multiple times if there are conflicts.
-    transaction.set(sfDocRef, { "accountNO": _AccountNo,
+  return transaction.set(sfDocRef, { "accountNO": _AccountNo,
     "transaction_type":_Transtype,
     "transaction_desc":_Transadesc,
     "amount":_amountt,
