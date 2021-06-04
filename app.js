@@ -104,10 +104,6 @@ app.post('/stk', access, _urlencoded,function(req,res){
      
 
 
-
-      
-
-
     let endpoint = " https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
     let auth = "Bearer "+ req.access_token
 
@@ -493,7 +489,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
     let _Deposit = req.depositt;
 
 
-    console.log('.......... STK Callback ..................');
+    console.log('.......... STK deposit callback ..................');
     if(res.status(200)){
 
         console.log("ID",id)
@@ -539,6 +535,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
             timestamp: new Date(),
             Payment_ID:_Paymentid,
             User_Id:id,
+            mpesaReceipt:transID,
             User_name:_Username,
         });
     
