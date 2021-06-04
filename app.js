@@ -250,7 +250,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         res.json((req.body.Body.stkCallback.CallbackMetadata))
         console.log(req.body.Body.stkCallback.CallbackMetadata)
 
-        if(Balance = req.body.Body.stkCallback.CallbackMetadata.Item[2].Value != null)
+        if(Balance = req.body.Body.stkCallback.CallbackMetadata.Item[2] != null)
         {
 
             amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
