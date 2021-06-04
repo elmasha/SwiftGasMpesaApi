@@ -388,7 +388,7 @@ app.post('/stkRemit', access, _urlencoded,function(req,res){
 
     _payphone = req.body.phone;
     _paycash = req.body.amount;
-    _userid = req.body.user_ID;
+    _payuserid = req.body.user_ID;
    _username = req.body.User_name;
    let _transDec = req.body.transDec;
     _payid = req.body.Payment_ID;
@@ -407,7 +407,7 @@ app.post('/stkRemit', access, _urlencoded,function(req,res){
    console.log("phone",_payphone)
    console.log("amount",_paycash)
    console.log("userName",_payusername)
-   console.log("orderID",_payid)
+   console.log("RemitID",_payid)
    
      
    const timeStamp = (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3);
