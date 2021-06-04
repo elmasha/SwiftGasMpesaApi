@@ -535,7 +535,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
             transaction_desc:_Transadesc,
             amount:_amountt,
             previousAmount:previous,
-            currentBalance:currentbalance,
+            currentBalance:currentbalance.toString(),
             timestamp: new Date(),
             Payment_ID:_Paymentid,
             User_Id:id,
