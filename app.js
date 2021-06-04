@@ -464,7 +464,8 @@ const middleware2 = (req, res, next) => {
     req.amounT = _amount;
     req.previousamount = _previousamout;
     req.userid = _userid;
-    req.depositt = _deposit; 
+    req.depositt = _deposit;
+    req.number = _phoneNumber;  
     next();
   };
   
@@ -478,7 +479,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
     var transdate = '';
     var transNo = '';
     let id = req.userid;
-    let _checkoutID = req.checkoutID;
+    let _CheckoutID = req.checkoutID;
     let _Username = req.username;
     let _AccountNo = req.accountno;
     let _Transtype = req.transactiontype;
@@ -487,6 +488,8 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
     let _Previousamout = req.previousamount
     let _Paymentid = req.payid;
     let _Deposit = req.depositt;
+    let _Number = req.number;
+
 
 
     console.log('.......... STK deposit callback ..................');
@@ -541,6 +544,21 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
     
             batch2.commit().then((ref) =>{
                 console.log("Printed successfully: ", _Paymentid);
+
+
+
+                db.collection("Payments_backup").doc(transID).set({
+                    mpesaReceipt : transID ,
+                    paidAmount : _amount,
+                    transNo : _Number ,
+                    Doc_ID: _Paymentid,
+                    checkOutReqID : _CheckoutID,
+                    user_Name: _Username,
+                    timestamp : transdate,
+                    User_id : id,
+                }).then((ref) => {
+                    console.log("Payment BackUP with ID: ", transID);
+                });
     
             });
     
