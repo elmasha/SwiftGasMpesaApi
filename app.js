@@ -667,9 +667,9 @@ app.post('/stkActivate', access, _urlencoded,function(req,res){
 
 
    console.log("phone",_phoneNumberActivate)
-   console.log("amount",_amount)
-   console.log("userName",_username)
-   console.log("orderID",_paymentid)
+   console.log("amount",_amountActivate)
+   console.log("userName",_usernameActivate)
+   console.log("orderID",_userActivateID)
 
    
      
@@ -752,7 +752,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
 
 
 
-   console.log('.......... STK deposit callback ..................');
+   console.log('.......... STK activate callback ..................');
    if(res.status(200)){
 
        console.log("ID",id)
