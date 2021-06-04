@@ -466,7 +466,7 @@ const middleware4 = (req, res, next) => {
    req.paycheckoutid = _checkoutRequestId7;
    req.payusername = _payusername;
    req.payname = _payname;
-   req.payuserid = _payuserid;
+   req.payUserid = _payuserid;
    req.payamount = _paycash;
    req.paytype = _paytype;
    req.payno = _payphone;
@@ -481,7 +481,7 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
    var amount = '';
    var transdate = '';
    var transNo = '';
-   let _PayUserId = req.payuserid;
+   let _PayUserId = req.payUserid;
    let _PayCheckoutID = req.paycheckoutid;
    let _PayUsername = req.payusername;
    let _PayID = req.payidd;
