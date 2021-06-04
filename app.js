@@ -442,6 +442,7 @@ app.post('/stkDeposit', access, _urlencoded,function(req,res){
             }else{
                 
                 res.status(200).json(body);
+                _checkoutRequestId5 = body.CheckoutRequestID;
                 console.log(body);
                 console.log(_checkoutRequestId5)
                 
