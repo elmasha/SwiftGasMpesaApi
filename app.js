@@ -813,7 +813,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
 
 
 ///----STK QUERY ---
-app.post('/stkDeposit/query',access,_urlencoded,function(req,res,next){
+app.post('/stkActivate/query',access,_urlencoded,function(req,res,next){
 
    let _checkoutRequestId = req.body.checkoutRequestId
 
