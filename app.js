@@ -530,15 +530,15 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
             console.log("Batch complete: ", transID);
 
 
-            batch2.update(boost2,{ "accountNO": _AccountNo,
-            "transaction_type":_Transtype,
-            "transaction_desc":_Transadesc,
-            "amount":_amountt,
-            "previousAmount":previous,
-            "currentBalance":currentbalance,
-            "timestamp": new Date(),
-            "Payment_ID":_Paymentid,
-            "User_Id":id,});
+            batch2.update(boost2,{ accountNO: _AccountNo,
+            transaction_type:_Transtype,
+            transaction_desc:_Transadesc,
+            amount:_amountt,
+            previousAmount:previous,
+            currentBalancecurrentbalance,
+            timestamp: new Date(),
+            Payment_ID:_Paymentid,
+            User_Id:id,});
     
             batch2.commit().then((ref) =>{
                 console.log("Printed successfully: ", _Paymentid);
