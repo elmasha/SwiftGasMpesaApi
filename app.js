@@ -30,7 +30,7 @@ app.use(flash());
 
 ///-----Wallet varible ----////
 
-let _username , _accountno,_transactiontype,_transactiondesc,_amount ,_previousamout,_currentbalance,_paymentid,_userid,_checkoutRequestId5,_balance,_deposit;
+let _username ,_phoneNumber, _accountno,_transactiontype,_transactiondesc,_amount ,_previousamout,_currentbalance,_paymentid,_userid,_checkoutRequestId5,_balance,_deposit;
 
 
 
@@ -370,7 +370,7 @@ app.post('/stk/query',access,_urlencoded,function(req,res,next){
 ///----Stk Push ---//
 app.post('/stkDeposit', access, _urlencoded,function(req,res){
 
-    let _phoneNumber = req.body.phone;
+     _phoneNumber = req.body.phone;
      _amount = req.body.amount;
      _userid = req.body.user_ID;
     _username = req.body.User_name;
