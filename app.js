@@ -496,7 +496,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
     if(res.status(200)){
 
         console.log("ID",id)
-        console.log("CheckOutId",_checkoutID)
+        console.log("CheckOutRequestID",_CheckoutID)
 
         res.json((req.body.Body.stkCallback.CallbackMetadata))
         console.log(req.body.Body.stkCallback.CallbackMetadata)
