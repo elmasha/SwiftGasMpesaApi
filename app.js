@@ -517,7 +517,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
     
         let totalamount = _balance + _Deposit;
         let previous = totalamount;
-        let currentbalance = _balance;
+        var currentbalance = _balance;
         var batch = db.batch();
         var batch2 = db.batch();
 
