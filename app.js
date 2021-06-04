@@ -284,7 +284,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Category: _Category,
             Vendor_ID : _VendorId,
             Item_image : _ItemImage ,
-            Price: _Price,
+            Price: _Price.toString(),
             Name: _Name,
             Item_desc : _ItemDesc,
             Customer_name: _CustomerName,
