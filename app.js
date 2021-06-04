@@ -217,6 +217,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
     var amount = '';
     var transdate = '';
     var transNo = '';
+    var Balance ;
     let id = req.name;
     let Userid = req.uid;
     let _checkoutID = req.checkoutID;
@@ -249,19 +250,18 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         res.json((req.body.Body.stkCallback.CallbackMetadata))
         console.log(req.body.Body.stkCallback.CallbackMetadata)
 
-        
-        amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
+        if(Balance = req.body.Body.stkCallback.CallbackMetadata.Item[2].Value != null)
+        {
+
+            amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
         transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
         transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value;
         transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
         
-       
         console.log("Amount",amount)
         console.log("Transaction",transID)
         console.log("Transaction",transNo)
         console.log("TransactionTime",transdate)
-
-    
 
         db.collection("Payments_backup").doc(transID).set({
             mpesaReceipt : transID ,
@@ -275,8 +275,6 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         }).then((ref) => {
             console.log("Added doc with ID: ", transID);
         });
-
-
 
         db.collection("Order_request").doc(id).set({
             mpesaReceipt : transID,
@@ -306,12 +304,67 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
 
             console.log("Order added doc with ID: ", id);
         });
+
+        }else {
+            amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
+            transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
+            transNo = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
+            transdate = req.body.Body.stkCallback.CallbackMetadata.Item[2].Value;
+            
+            console.log("Amount",amount)
+            console.log("Transaction",transID)
+            console.log("Transaction",transNo)
+            console.log("TransactionTime",transdate)
+    
+            db.collection("Payments_backup").doc(transID).set({
+                mpesaReceipt : transID ,
+                paidAmount : amount,
+                transNo : transNo ,
+                Doc_ID: id,
+                checkOutReqID : _checkoutID,
+                user_Name: userName,
+                timestamp : transdate,
+                User_id : Userid,
+            }).then((ref) => {
+                console.log("Added doc with ID: ", transID);
+            });
+    
+            db.collection("Order_request").doc(id).set({
+                mpesaReceipt : transID,
+                doc_id: id,
+                User_id : Userid,
+                mpesaReceipt : transID ,
+                Category: _Category,
+                Vendor_ID : _VendorId,
+                Item_image : _ItemImage ,
+                Price: _Price,
+                Name: _Name,
+                Item_desc : _ItemDesc,
+                Customer_name: _CustomerName,
+                Customer_No : _CustomerNo,
+                User_image : _UserImage ,
+                Quantity: _Quantity,
+                lat: _Lat,
+                lng: _Lng ,
+                Order_status: _OrderStatus,
+                Payment_method : _PaymentMethod,
+                Rated : _Rated,
+                Vendor_Name: _VendorName,
+                Shop_Name : _ShopName,
+                Shop_No : _ShopNo ,
+                timestamp : new Date(),
+            }).then((ref) => {
+    
+                console.log("Order added doc with ID: ", id);
+            });
+        }
         
-    }else if(res.status(404)){
+        
+        
+        }else if(res.status(404)){
         res.json((req.body))
         console.log(req.body.Body);
     }
-
     next()
 
     })
