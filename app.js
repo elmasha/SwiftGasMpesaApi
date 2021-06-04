@@ -461,7 +461,7 @@ app.post('/stkDeposit', access, _urlencoded,function(req,res){
 const middleware2 = (req, res, next) => {
     req.payid = _paymentid;
     req.checkoutID = _checkoutRequestId5;
-    req.username = _paymentid;
+    req.username = _username;
     req.accountno = _accountno;
     req.transactiontype = _transactiontype;
     req.transactiondesc = _transactiondesc
@@ -534,7 +534,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
             transaction_type:_Transtype,
             transaction_desc:_Transadesc,
             amount:_amountt,
-            previousAmount:previous,
+            previousAmount:previous.toString(),
             currentBalance:currentbalance.toString(),
             timestamp: new Date(),
             Payment_ID:_Paymentid,
