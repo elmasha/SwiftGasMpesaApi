@@ -530,7 +530,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
             console.log("Batch complete: ", transID);
 
 
-            batch2.update(boost2,{ accountNO: _AccountNo,
+            batch2.set(boost2,{ accountNO: _AccountNo,
             transaction_type:_Transtype,
             transaction_desc:_Transadesc,
             amount:_amountt,
