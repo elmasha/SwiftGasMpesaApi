@@ -562,13 +562,13 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
             
                db.collection("Payments_backup").doc(transID).set({
                    mpesaReceipt : transID ,
-                   paidAmount : _amount,
-                   transNo : _Number ,
-                   Doc_ID: _Paymentid,
-                   checkOutReqID : _CheckoutID,
-                   user_Name: _Username,
+                   paidAmount : _PayAmount,
+                   transNo : _PayPhone ,
+                   Doc_ID: _PayID,
+                   checkOutReqID : _PayCheckoutID,
+                   user_Name: _PayUsername,
                    timestamp : transdate,
-                   User_id : id,
+                   User_id : _PayUserId,
                }).then((ref) => {
                    console.log("Payment BackUP with ID: ", transID);
                });
