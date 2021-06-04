@@ -538,7 +538,7 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
             User_ID: _PayUserId,
             timestamp: new Date(),
             User_name: _PayUsername,
-            Payment_ID: _Paymentid,
+            Payment_ID: _PayID,
             MpesaCheckout_ID: _PayCheckoutID,
             mpesaReceipt: transID,
             Trips:_PayTrips,
