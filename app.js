@@ -290,7 +290,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Customer_name: _CustomerName,
             Customer_No : _CustomerNo,
             User_image : _UserImage ,
-            Quantity: _Quantity,
+            Quantity: _Quantity.toString(),
             lat: _Lat,
             lng: _Lng ,
             Order_status: _OrderStatus,
