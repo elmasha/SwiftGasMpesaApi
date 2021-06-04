@@ -519,9 +519,10 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
         let previous = totalamount;
         let currentbalance = _balance;
         var batch = db.batch();
+        var batch2 = db.batch();
 
         var boost = db.collection("MGas_Client").doc(id);
-        var sfDocRef = db.collection("Wallet_Transaction").doc(_Paymentid);
+        var boost2 = db.collection("Wallet_Transaction").doc(_Paymentid);
 
         batch.update(boost,{"Swift_wallet":totalamount});
 
@@ -529,30 +530,24 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
             console.log("Batch complete: ", transID);
 
 
-            // Create a reference to the SF doc.
-
-// Uncomment to initialize the doc.
-// sfDocRef.set({ population: 0 });
-
-return db.runTransaction((transaction) => {
-    // This code may get re-run multiple times if there are conflicts.
-  return transaction.set(sfDocRef, { "accountNO": _AccountNo,
-    "transaction_type":_Transtype,
-    "transaction_desc":_Transadesc,
-    "amount":_amountt,
-    "previousAmount":previous,
-    "currentBalance":currentbalance,
-    "timestamp": new Date(),
-    "Payment_ID":_Paymentid,
-    "User_Id":id, });
-   
-        }).then(() => {
-            console.log("Transaction successfully committed!");
-        }).catch((error) => {
-            console.log("Transaction failed: ", error);
-        });
+            batch2.update(boost2,{ "accountNO": _AccountNo,
+            "transaction_type":_Transtype,
+            "transaction_desc":_Transadesc,
+            "amount":_amountt,
+            "previousAmount":previous,
+            "currentBalance":currentbalance,
+            "timestamp": new Date(),
+            "Payment_ID":_Paymentid,
+            "User_Id":id,});
+    
+            batch2.commit().then((ref) =>{
+                console.log("Printed successfully: ", _Paymentid);
+    
+            });
+    
 
 
+            
 
         });
 
@@ -565,6 +560,7 @@ return db.runTransaction((transaction) => {
     next()
 
     })
+
 
 
 
