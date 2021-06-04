@@ -36,6 +36,7 @@ let _username ,_phoneNumber, _accountno,_transactiontype,_transactiondesc,_amoun
 ///-----Activate variable ----////
 
 let _userActivateID,_phoneNumberActivate,_amountActivate,_usernameActivate,_checkoutRequestId6;
+var Balance ;
 
 
 
@@ -217,7 +218,6 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
     var amount = '';
     var transdate = '';
     var transNo = '';
-    var Balance ;
     let id = req.name;
     let Userid = req.uid;
     let _checkoutID = req.checkoutID;
@@ -253,7 +253,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         if(Balance = req.body.Body.stkCallback.CallbackMetadata.Item[2].Name == 'Balance')
         {
 
-        amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
+            amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
         transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
         transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value;
         transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
@@ -556,80 +556,156 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
        res.json((req.body.Body.stkCallback.CallbackMetadata))
        console.log(req.body.Body.stkCallback.CallbackMetadata)
 
+       if(Balance = req.body.Body.stkCallback.CallbackMetadata.Item[2].Name == 'Balance'){
+
+        amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
+        transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
+        transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value;
+        transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
+        
        
-       amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
-       transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
-       transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value;
-       transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
-       
-      
-       console.log("Amount",_PayAmount)
-       console.log("Transaction",transID)
-       console.log("Transaction",transNo)
-       console.log("TransactionTime",transdate)
-
-   
-      
-       var batch = db.batch();
-       var batch2 = db.batch();
-
-       var boost = db.collection("Gas_Vendor").doc(_PayUserId);
-       var boost2 = db.collection("Payment_History").doc(_PayID);
-
-       batch.update(boost,{"Activation_fee":150});
-       batch.update(boost,{"Cash_Trips":0});
-       batch.update(boost,{"Earnings":0});
-
-       batch.commit().then((ref) =>{
-           console.log("Batch complete: ", transID);
-
-           batch2.set(boost2,{
-            Name:  _PaymentName,
-            Amount: _PayAmount,
-            PhoneNo: _PayPhone,
-            Type: _PayType,
-            User_ID: _PayUserId,
-            timestamp: new Date(),
-            User_name: _PayUsername,
-            Payment_ID: _PayID,
-            MpesaCheckout_ID: _PayCheckoutID,
-            mpesaReceipt: transID,
-            Trips:_PayTrips,
-       });
-   
-           batch2.commit().then((ref) =>{
-               console.log("Printed successfully: ", _PayID);
-
-               db.collection("Notifications").doc(_PayID).set({
-                Name : _PaymentName,
-                User_ID : _PayUserId,
-                type : _PayType,
-                Order_iD: _PayID,
-                to : _PayUserId,
-                from: _PayUserId,
-                timestamp : new Date(),
-            }).then((ref) => {
-                console.log("Notification set with ID: ", _PayID);
+        console.log("Amount",_PayAmount)
+        console.log("Transaction",transID)
+        console.log("Transaction",transNo)
+        console.log("TransactionTime",transdate)
+ 
+        var batch = db.batch();
+        var batch2 = db.batch();
+ 
+        var boost = db.collection("Gas_Vendor").doc(_PayUserId);
+        var boost2 = db.collection("Payment_History").doc(_PayID);
+ 
+        batch.update(boost,{"Activation_fee":150});
+        batch.update(boost,{"Cash_Trips":0});
+        batch.update(boost,{"Earnings":0});
+ 
+        batch.commit().then((ref) =>{
+            console.log("Batch complete: ", transID);
+ 
+            batch2.set(boost2,{
+             Name:  _PaymentName,
+             Amount: _PayAmount,
+             PhoneNo: _PayPhone,
+             Type: _PayType,
+             User_ID: _PayUserId,
+             timestamp: new Date(),
+             User_name: _PayUsername,
+             Payment_ID: _PayID,
+             MpesaCheckout_ID: _PayCheckoutID,
+             mpesaReceipt: transID,
+             Trips:_PayTrips,
+        });
+    
+            batch2.commit().then((ref) =>{
+                console.log("Printed successfully: ", _PayID);
+ 
+                db.collection("Notifications").doc(_PayID).set({
+                 Name : _PaymentName,
+                 User_ID : _PayUserId,
+                 type : _PayType,
+                 Order_iD: _PayID,
+                 to : _PayUserId,
+                 from: _PayUserId,
+                 timestamp : new Date(),
+             }).then((ref) => {
+                 console.log("Notification set with ID: ", _PayID);
+             });
+ 
+             
+                db.collection("Payments_backup").doc(transID).set({
+                    mpesaReceipt : transID ,
+                    paidAmount : _PayAmount,
+                    transNo : _PayPhone ,
+                    Doc_ID: _PayID,
+                    checkOutReqID : _PayCheckoutID,
+                    user_Name: _PayUsername,
+                    timestamp : transdate,
+                    User_id : _PayUserId,
+                }).then((ref) => {
+                    console.log("Payment BackUP with ID: ", transID);
+                });
+    
             });
+    
+ 
+        });
 
+       }else{
+
+            amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
+            transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
+            transNo = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
+            transdate = req.body.Body.stkCallback.CallbackMetadata.Item[2].Value;
             
-               db.collection("Payments_backup").doc(transID).set({
-                   mpesaReceipt : transID ,
-                   paidAmount : _PayAmount,
-                   transNo : _PayPhone ,
-                   Doc_ID: _PayID,
-                   checkOutReqID : _PayCheckoutID,
-                   user_Name: _PayUsername,
-                   timestamp : transdate,
-                   User_id : _PayUserId,
-               }).then((ref) => {
-                   console.log("Payment BackUP with ID: ", transID);
-               });
-   
-           });
-   
+       
+        console.log("Amount",_PayAmount)
+        console.log("Transaction",transID)
+        console.log("Transaction",transNo)
+        console.log("TransactionTime",transdate)
+ 
+        var batch = db.batch();
+        var batch2 = db.batch();
+ 
+        var boost = db.collection("Gas_Vendor").doc(_PayUserId);
+        var boost2 = db.collection("Payment_History").doc(_PayID);
+ 
+        batch.update(boost,{"Activation_fee":150});
+        batch.update(boost,{"Cash_Trips":0});
+        batch.update(boost,{"Earnings":0});
+ 
+        batch.commit().then((ref) =>{
+            console.log("Batch complete: ", transID);
+ 
+            batch2.set(boost2,{
+             Name:  _PaymentName,
+             Amount: _PayAmount,
+             PhoneNo: _PayPhone,
+             Type: _PayType,
+             User_ID: _PayUserId,
+             timestamp: new Date(),
+             User_name: _PayUsername,
+             Payment_ID: _PayID,
+             MpesaCheckout_ID: _PayCheckoutID,
+             mpesaReceipt: transID,
+             Trips:_PayTrips,
+        });
+    
+            batch2.commit().then((ref) =>{
+                console.log("Printed successfully: ", _PayID);
+ 
+                db.collection("Notifications").doc(_PayID).set({
+                 Name : _PaymentName,
+                 User_ID : _PayUserId,
+                 type : _PayType,
+                 Order_iD: _PayID,
+                 to : _PayUserId,
+                 from: _PayUserId,
+                 timestamp : new Date(),
+             }).then((ref) => {
+                 console.log("Notification set with ID: ", _PayID);
+             });
+ 
+             
+                db.collection("Payments_backup").doc(transID).set({
+                    mpesaReceipt : transID ,
+                    paidAmount : _PayAmount,
+                    transNo : _PayPhone ,
+                    Doc_ID: _PayID,
+                    checkOutReqID : _PayCheckoutID,
+                    user_Name: _PayUsername,
+                    timestamp : transdate,
+                    User_id : _PayUserId,
+                }).then((ref) => {
+                    console.log("Payment BackUP with ID: ", transID);
+                });
+    
+            });
+    
+ 
+        });
+    
+       }
 
-       });
 
      
        }else if(res.status(404)){
@@ -830,74 +906,144 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
         res.json((req.body.Body.stkCallback.CallbackMetadata))
         console.log(req.body.Body.stkCallback.CallbackMetadata)
 
-        
-        amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
-        transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
-        transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value;
-        transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
-        
-       
-        console.log("Amount",amount)
-        console.log("Transaction",transID)
-        console.log("Transaction",transNo)
-        console.log("TransactionTime",transdate)
-
+        if(Balance = req.body.Body.stkCallback.CallbackMetadata.Item[2].Name == 'Balance'){
+            amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
+            transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
+            transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value;
+            transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
+            
+           
+            console.log("Amount",amount)
+            console.log("Transaction",transID)
+            console.log("Transaction",transNo)
+            console.log("TransactionTime",transdate)
     
-        let totalamount = _balance + _Deposit;
-        let previous = totalamount;
-        var currentbalance = _balance;
-        var batch = db.batch();
-        var batch2 = db.batch();
-
-        var boost = db.collection("MGas_Client").doc(id);
-        var boost2 = db.collection("Wallet_Transaction").doc(_Paymentid);
-
-        batch.update(boost,{"Swift_wallet":totalamount});
-
-        batch.commit().then((ref) =>{
-            console.log("Batch complete: ", transID);
-
-
-            batch2.set(boost2,{ accountNO: _AccountNo,
-            transaction_type:_Transtype,
-            transaction_desc:_Transadesc,
-            amount:_amountt,
-            previousAmount:previous.toString(),
-            currentBalance:currentbalance.toString(),
-            timestamp: new Date(),
-            Payment_ID:_Paymentid,
-            User_Id:id,
-            mpesaReceipt:transID,
-            User_name:_Username,
-        });
+        
+            let totalamount = _balance + _Deposit;
+            let previous = totalamount;
+            var currentbalance = _balance;
+            var batch = db.batch();
+            var batch2 = db.batch();
     
-            batch2.commit().then((ref) =>{
-                console.log("Printed successfully: ", _Paymentid);
-
-
-
-                db.collection("Payments_backup").doc(transID).set({
-                    mpesaReceipt : transID ,
-                    paidAmount : _amount,
-                    transNo : _Number ,
-                    Doc_ID: _Paymentid,
-                    checkOutReqID : _CheckoutID,
-                    user_Name: _Username,
-                    timestamp : transdate,
-                    User_id : id,
-                }).then((ref) => {
-                    console.log("Payment BackUP with ID: ", transID);
+            var boost = db.collection("MGas_Client").doc(id);
+            var boost2 = db.collection("Wallet_Transaction").doc(_Paymentid);
+    
+            batch.update(boost,{"Swift_wallet":totalamount});
+    
+            batch.commit().then((ref) =>{
+                console.log("Batch complete: ", transID);
+    
+    
+                batch2.set(boost2,{ accountNO: _AccountNo,
+                transaction_type:_Transtype,
+                transaction_desc:_Transadesc,
+                amount:_amountt,
+                previousAmount:previous.toString(),
+                currentBalance:currentbalance.toString(),
+                timestamp: new Date(),
+                Payment_ID:_Paymentid,
+                User_Id:id,
+                mpesaReceipt:transID,
+                User_name:_Username,
+            });
+        
+                batch2.commit().then((ref) =>{
+                    console.log("Printed successfully: ", _Paymentid);
+    
+    
+    
+                    db.collection("Payments_backup").doc(transID).set({
+                        mpesaReceipt : transID ,
+                        paidAmount : _amount,
+                        transNo : _Number ,
+                        Doc_ID: _Paymentid,
+                        checkOutReqID : _CheckoutID,
+                        user_Name: _Username,
+                        timestamp : transdate,
+                        User_id : id,
+                    }).then((ref) => {
+                        console.log("Payment BackUP with ID: ", transID);
+                    });
+        
                 });
+        
+    
+    
+                
     
             });
+        }else{
+
+            amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
+            transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
+            transNo = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
+            transdate = req.body.Body.stkCallback.CallbackMetadata.Item[2].Value;
+             
+           
+            console.log("Amount",amount)
+            console.log("Transaction",transID)
+            console.log("Transaction",transNo)
+            console.log("TransactionTime",transdate)
     
+        
+            let totalamount = _balance + _Deposit;
+            let previous = totalamount;
+            var currentbalance = _balance;
+            var batch = db.batch();
+            var batch2 = db.batch();
+    
+            var boost = db.collection("MGas_Client").doc(id);
+            var boost2 = db.collection("Wallet_Transaction").doc(_Paymentid);
+    
+            batch.update(boost,{"Swift_wallet":totalamount});
+    
+            batch.commit().then((ref) =>{
+                console.log("Batch complete: ", transID);
+    
+    
+                batch2.set(boost2,{ accountNO: _AccountNo,
+                transaction_type:_Transtype,
+                transaction_desc:_Transadesc,
+                amount:_amountt,
+                previousAmount:previous.toString(),
+                currentBalance:currentbalance.toString(),
+                timestamp: new Date(),
+                Payment_ID:_Paymentid,
+                User_Id:id,
+                mpesaReceipt:transID,
+                User_name:_Username,
+            });
+        
+                batch2.commit().then((ref) =>{
+                    console.log("Printed successfully: ", _Paymentid);
+    
+    
+    
+                    db.collection("Payments_backup").doc(transID).set({
+                        mpesaReceipt : transID ,
+                        paidAmount : _amount,
+                        transNo : _Number ,
+                        Doc_ID: _Paymentid,
+                        checkOutReqID : _CheckoutID,
+                        user_Name: _Username,
+                        timestamp : transdate,
+                        User_id : id,
+                    }).then((ref) => {
+                        console.log("Payment BackUP with ID: ", transID);
+                    });
+        
+                });
+        
+    
+    
+                
+    
+            });
 
+        }
+       
 
-            
-
-        });
-
-      
+    
         }else if(res.status(404)){
         res.json((req.body))
         console.log(req.body.Body);
@@ -1082,43 +1228,85 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
        res.json((req.body.Body.stkCallback.CallbackMetadata))
        console.log(req.body.Body.stkCallback.CallbackMetadata)
 
-       
-       amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
-       transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
-       transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value;
-       transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
-       
-      
-       console.log("Amount",_amountt)
-       console.log("Transaction",transID)
-       console.log("Transaction",_Number)
-       console.log("TransactionTime",transdate)
-
-       var batch = db.batch();
-       var boost = db.collection("Gas_Vendor").doc(id);
-
-       batch.update(boost,{"Activation_fee":150});
-
-       batch.commit().then((ref) =>{
-           console.log("Batch complete: ", transID);
-
-               db.collection("Payments_backup").doc(transID).set({
-                   mpesaReceipt : transID ,
-                   paidAmount : _amountt,
-                   transNo : _Number ,
-                   Doc_ID: id,
-                   checkOutReqID : _CheckoutID,
-                   user_Name: _Username,
-                   timestamp : transdate,
-                   User_id : id,
-               }).then((ref) => {
-                   console.log("Payment BackUP with ID: ", transID);
-               });
-   
+       if(Balance = req.body.Body.stkCallback.CallbackMetadata.Item[2].Name == 'Balance'){
+        amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
+        transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
+        transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value;
+        transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
         
+       
+        console.log("Amount",_amountt)
+        console.log("Transaction",transID)
+        console.log("Transaction",_Number)
+        console.log("TransactionTime",transdate)
+ 
+        var batch = db.batch();
+        var boost = db.collection("Gas_Vendor").doc(id);
+ 
+        batch.update(boost,{"Activation_fee":150});
+ 
+        batch.commit().then((ref) =>{
+            console.log("Batch complete: ", transID);
+ 
+                db.collection("Payments_backup").doc(transID).set({
+                    mpesaReceipt : transID ,
+                    paidAmount : _amountt,
+                    transNo : _Number ,
+                    Doc_ID: id,
+                    checkOutReqID : _CheckoutID,
+                    user_Name: _Username,
+                    timestamp : transdate,
+                    User_id : id,
+                }).then((ref) => {
+                    console.log("Payment BackUP with ID: ", transID);
+                });
+    
+         
+ 
+        });
+ 
 
-       });
+       }else{
 
+        amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
+        transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
+        transNo = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
+        transdate = req.body.Body.stkCallback.CallbackMetadata.Item[2].Value;
+        
+       
+        console.log("Amount",_amountt)
+        console.log("Transaction",transID)
+        console.log("Transaction",_Number)
+        console.log("TransactionTime",transdate)
+ 
+        var batch = db.batch();
+        var boost = db.collection("Gas_Vendor").doc(id);
+ 
+        batch.update(boost,{"Activation_fee":150});
+ 
+        batch.commit().then((ref) =>{
+            console.log("Batch complete: ", transID);
+ 
+                db.collection("Payments_backup").doc(transID).set({
+                    mpesaReceipt : transID ,
+                    paidAmount : _amountt,
+                    transNo : _Number ,
+                    Doc_ID: id,
+                    checkOutReqID : _CheckoutID,
+                    user_Name: _Username,
+                    timestamp : transdate,
+                    User_id : id,
+                }).then((ref) => {
+                    console.log("Payment BackUP with ID: ", transID);
+                });
+    
+         
+ 
+        });
+ 
+
+       }
+   
      
        }else if(res.status(404)){
        res.json((req.body))
