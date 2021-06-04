@@ -538,7 +538,9 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
             currentBalance:currentbalance,
             timestamp: new Date(),
             Payment_ID:_Paymentid,
-            User_Id:id,});
+            User_Id:id,
+            User_name:_Username,
+        });
     
             batch2.commit().then((ref) =>{
                 console.log("Printed successfully: ", _Paymentid);
