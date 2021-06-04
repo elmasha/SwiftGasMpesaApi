@@ -457,7 +457,7 @@ app.post('/stkDeposit', access, _urlencoded,function(req,res){
 
 const middleware2 = (req, res, next) => {
     req.payid = _paymentid;
-    req.checkoutID = _checkoutRequestId5;
+    req.checkoutid = _checkoutRequestId5;
     req.username = _username;
     req.accountno = _accountno;
     req.transactiontype = _transactiontype;
@@ -480,13 +480,12 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
     var transdate = '';
     var transNo = '';
     let id = req.userid;
-    let _CheckoutID = req.checkoutID;
+    let _CheckoutID = req.checkoutid;
     let _Username = req.username;
     let _AccountNo = req.accountno;
     let _Transtype = req.transactiontype;
     let _Transadesc = req.transactiondesc;
     let _amountt = req.amounT;
-    let _Previousamout = req.previousamount
     let _Paymentid = req.payid;
     let _Deposit = req.depositt;
     let _Number = req.number;
