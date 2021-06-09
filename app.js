@@ -26,16 +26,19 @@ app.use(flash());
     var userName = '';
     let _checkoutRequestId2;
     let order_ID;
-    let _exCylinder,_category,_customer_no,_customer_name,_item_desc ,_item_image,_name,_order_status,_payment_method,_price,_quantity,_rated,_shop_name,_shop_no,_user_id,_user_image,_vendor_id,_vendor_name,_time_stamp,_lat,_lng;
+    let _exCylinder,_category,_customer_no,_customer_name,_item_desc ,_item_image,
+    _name,_order_status,_payment_method,_price,_quantity,_rated,_shop_name,_shop_no,_user_id,
+    _user_image,_vendor_id,_vendor_name,_time_stamp,_lat,_lng = "";
 
 ///-----Wallet variable ----////
 
-let _username ,_phoneNumber, _accountno,_transactiontype,_transactiondesc,_amount ,_previousamout,_currentbalance,_paymentid,_userid,_checkoutRequestId5,_balance,_deposit;
+let _username ,_phoneNumber, _accountno,_transactiontype,_transactiondesc,_amount ,_previousamout,_currentbalance,_paymentid,
+_userid,_checkoutRequestId5,_balance,_deposit = "";
 
 
 ///-----Activate variable ----////
 
-let _userActivateID,_phoneNumberActivate,_amountActivate,_usernameActivate,_checkoutRequestId6;
+let _userActivateID,_phoneNumberActivate,_amountActivate,_usernameActivate,_checkoutRequestId6 = "";
 var Balance ;
 
 
@@ -265,51 +268,59 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         console.log("Transaction",transID)
         console.log("Transaction",transNo)
         console.log("TransactionTime",transdate)
+        if(_exCylinder,_category,_customer_no,_customer_name,_item_desc ,_item_image,
+            _name,_order_status,_payment_method,_price,_quantity,_rated,_shop_name,_shop_no,_user_id,
+            _user_image,_vendor_id,_vendor_name,_time_stamp,_lat,_lng = ""){
+                console.log("Value is null");
+            }else{
 
-        db.collection("Payments_backup").doc(transID).set({
-            mpesaReceipt : transID ,
-            paidAmount : amount,
-            transNo : transNo ,
-            Doc_ID: id,
-            checkOutReqID : _checkoutID,
-            user_Name: userName,
-            timestamp : transdate,
-            User_id : Userid,
-        }).then((ref) => {
-            console.log("Added doc with ID: ", transID);
-        });
+                db.collection("Payments_backup").doc(transID).set({
+                    mpesaReceipt : transID ,
+                    paidAmount : amount,
+                    transNo : transNo ,
+                    Doc_ID: id,
+                    checkOutReqID : _checkoutID,
+                    user_Name: userName,
+                    timestamp : transdate,
+                    User_id : Userid,
+                }).then((ref) => {
+                    console.log("Added doc with ID: ", transID);
+                });
+        
+                db.collection("Order_request").doc(id).set({
+                    mpesaReceipt : transID,
+                    doc_id: id,
+                    User_id : Userid,
+                    mpesaReceipt : transID ,
+                    Category: _Category,
+                    Vendor_ID : _VendorId,
+                    Item_image : _ItemImage ,
+                    Price: _Price.toString(),
+                    Name: _Name,
+                    Item_desc : _ItemDesc,
+                    Customer_name: _CustomerName,
+                    Customer_No : _CustomerNo,
+                    User_image : _UserImage ,
+                    Quantity: _Quantity.toString(),
+                    lat: _Lat,
+                    lng: _Lng ,
+                    Order_status: _OrderStatus,
+                    Payment_method : _PaymentMethod,
+                    Rated : _Rated,
+                    Vendor_Name: _VendorName,
+                    Shop_Name : _ShopName,
+                    Shop_No : _ShopNo ,
+                    exCylinder : _ExCylinder,
+                    timestamp : new Date(),
+                }).then((ref) => {
+        
+                    console.log("Order added doc with ID: ", id);
+                    console.log("Order is", _Name ," ",_item_desc);
+        
+                });
+            }
 
-        db.collection("Order_request").doc(id).set({
-            mpesaReceipt : transID,
-            doc_id: id,
-            User_id : Userid,
-            mpesaReceipt : transID ,
-            Category: _Category,
-            Vendor_ID : _VendorId,
-            Item_image : _ItemImage ,
-            Price: _Price.toString(),
-            Name: _Name,
-            Item_desc : _ItemDesc,
-            Customer_name: _CustomerName,
-            Customer_No : _CustomerNo,
-            User_image : _UserImage ,
-            Quantity: _Quantity.toString(),
-            lat: _Lat,
-            lng: _Lng ,
-            Order_status: _OrderStatus,
-            Payment_method : _PaymentMethod,
-            Rated : _Rated,
-            Vendor_Name: _VendorName,
-            Shop_Name : _ShopName,
-            Shop_No : _ShopNo ,
-            exCylinder : _ExCylinder,
-            timestamp : new Date(),
-        }).then((ref) => {
-
-            console.log("Order added doc with ID: ", id);
-            console.log("Order is", _Name ," ",_item_desc);
-
-        });
+       
 
         }else {
             amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
