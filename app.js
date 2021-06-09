@@ -26,7 +26,7 @@ app.use(flash());
     var userName = '';
     let _checkoutRequestId2;
     let order_ID;
-    let _category,_customer_no,_customer_name,_item_desc ,_item_image,_name,_order_status,_payment_method,_price,_quantity,_rated,_shop_name,_shop_no,_user_id,_user_image,_vendor_id,_vendor_name,_time_stamp,_lat,_lng;
+    let _exCylinder,_category,_customer_no,_customer_name,_item_desc ,_item_image,_name,_order_status,_payment_method,_price,_quantity,_rated,_shop_name,_shop_no,_user_id,_user_image,_vendor_id,_vendor_name,_time_stamp,_lat,_lng;
 
 ///-----Wallet variable ----////
 
@@ -107,6 +107,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
      _shop_no = req.body.Shop_No;
      _user_image = req.body.User_image;
      _time_stamp = req.body.timestamp;
+     _exCylinder = req.body.exCylinder;
      
 
 
@@ -205,6 +206,7 @@ const middleware = (req, res, next) => {
     req.vendorName = _vendor_name;
     req.latt = _lat;
     req.lngg = _lng;
+    req.exCylinder = _exCylinder;
     
     next();
   };
@@ -239,6 +241,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
     let _Lat = req.latt;
     let _Lng = req.lngg;
     let _OrderStatus =  req.orderStatus;
+    let _ExCylinder = req.exCylinder;
     
 
     console.log('.......... STK Callback ..................');
@@ -299,7 +302,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Vendor_Name: _VendorName,
             Shop_Name : _ShopName,
             Shop_No : _ShopNo ,
-            exCylinder : "no",
+            exCylinder : _ExCylinder,
             timestamp : new Date(),
         }).then((ref) => {
 
