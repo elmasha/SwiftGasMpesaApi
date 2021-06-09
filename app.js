@@ -195,7 +195,7 @@ const middleware = (req, res, next) => {
     req.itemImage = _item_image;
     req.orderStatus = _order_status;
     req.paymentMethod = _checkoutRequestId2;
-    req.price = _price;
+    req.price = _price.toString();
     req.quantiy = _quantity;
     req.rated = _rated;
     req.shopName = _shop_name;
@@ -228,8 +228,8 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
     let _ItemDesc = req.itemDesc;
     let _ItemImage = req.itemImage;
     let _PaymentMethod = req.paymentMethod;
-    let _Price = req.price;
-    let _Quantity = req.quantiy;
+    let _Price = req.price.toString();
+    let _Quantity = req.quantiy.toString();
     let _Rated = req.rated;
     let _ShopName = req.shopName;
     let _ShopNo = req.shopNo;
