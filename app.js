@@ -299,10 +299,13 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
             Vendor_Name: _VendorName,
             Shop_Name : _ShopName,
             Shop_No : _ShopNo ,
+            exCylinder : "no",
             timestamp : new Date(),
         }).then((ref) => {
 
             console.log("Order added doc with ID: ", id);
+            console.log("Order is", _Name ," ",_item_desc);
+
         });
 
         }else {
