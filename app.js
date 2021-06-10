@@ -369,6 +369,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
                 Rated : _Rated,
                 Vendor_Name: _VendorName,
                 Shop_Name : _ShopName,
+                exCylinder : _ExCylinder,
                 Shop_No : _ShopNo ,
                 timestamp : new Date(),
             }).then((ref) => {
