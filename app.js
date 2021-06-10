@@ -316,27 +316,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         
                     console.log("Order added doc with ID: ", id);
                     console.log("Order is", _Name ," ",_item_desc);
-                     Userid = '';
-                     _checkoutID = '';
-                     _Name = '';
-                     _Category = '';
-                     _CustomerNo = '';
-                     _CustomerName = '';
-                     _ItemDesc = '';
-                     _ItemImage = '';
-                     _PaymentMethod = '';
-                     _Price = '';
-                     _Quantity = '';
-                     _Rated = '';
-                     _ShopName = '';
-                     _ShopNo = '';
-                     _UserImage = '';
-                     _VendorId = '';
-                     _VendorName = '';
-                     _Lat = '';
-                     _Lng = '';
-                     _OrderStatus =  '';
-                     _ExCylinder = '';
+                
                 });
             }
 
@@ -392,27 +372,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
                 Shop_No : _ShopNo ,
                 timestamp : new Date(),
             }).then((ref) => {
-                Userid = '';
-                _checkoutID = '';
-                _Name = '';
-                _Category = '';
-                _CustomerNo = '';
-                _CustomerName = '';
-                _ItemDesc = '';
-                _ItemImage = '';
-                _PaymentMethod = '';
-                _Price = '';
-                _Quantity = '';
-                _Rated = '';
-                _ShopName = '';
-                _ShopNo = '';
-                _UserImage = '';
-                _VendorId = '';
-                _VendorName = '';
-                _Lat = '';
-                _Lng = '';
-                _OrderStatus =  '';
-                _ExCylinder = '';
+              
                 console.log("Order added doc with ID: ", id);
             });
         }
