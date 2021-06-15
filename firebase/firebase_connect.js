@@ -2,14 +2,13 @@ const firebase = require('firebase')
 
 
 const firebaseApp = firebase.initializeApp({
-    apiKey: "AIzaSyDRtR2dTP3DQnMEDIPNTiyj_wrnmtbr168",
-    authDomain: "chapchapgas-2d104.firebaseapp.com",
-    databaseURL: "https://chapchapgas-2d104.firebaseio.com",
-    projectId: "chapchapgas-2d104",
-    storageBucket: "chapchapgas-2d104.appspot.com",
-    messagingSenderId: "706742017410",
-    appId: "1:706742017410:web:281eaf8dda6621a43e039b",
-    measurementId: "G-9FLZ4NS6F9"
+    apiKey: "AIzaSyD8PEzdBZ-8NA_uV555Tu7l7CtDc4z4arY",
+    authDomain: "swiftgas-65014.firebaseapp.com",
+    projectId: "swiftgas-65014",
+    storageBucket: "swiftgas-65014.appspot.com",
+    messagingSenderId: "650675477770",
+    appId: "1:650675477770:web:745c357f841c95af012ef3",
+    measurementId: "G-YKZW9PQCF8"
 });
 
 

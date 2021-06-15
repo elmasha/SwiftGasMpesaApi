@@ -63,7 +63,7 @@ app.use((req, res, next) => {
 //routes
 app.get('/', (req, res,next)=>{
 
-res.send("Hello welcome to SwiftGas Mpesa API")
+res.status(200).send("Hello welcome to SwiftGas Mpesa API")
 
 
 })
