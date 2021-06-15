@@ -944,7 +944,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
             var batch = db.batch();
             var batch2 = db.batch();
     
-            var boost = db.collection("MGas_Client").doc(id);
+            var boost = db.collection("SwiftGas_Client").doc(id);
             var boost2 = db.collection("Wallet_Transaction").doc(_Paymentid);
     
             batch.update(boost,{"Swift_wallet":totalamount});
@@ -1011,7 +1011,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
             var batch = db.batch();
             var batch2 = db.batch();
     
-            var boost = db.collection("MGas_Client").doc(id);
+            var boost = db.collection("SwiftGas_Client").doc(id);
             var boost2 = db.collection("Wallet_Transaction").doc(_Paymentid);
     
             batch.update(boost,{"Swift_wallet":totalamount});
@@ -1260,7 +1260,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
         console.log("TransactionTime",transdate)
  
         var batch = db.batch();
-        var boost = db.collection("Gas_Vendor").doc(id);
+        var boost = db.collection("SwiftGas_Vendor").doc(id);
  
         batch.update(boost,{"Activation_fee":150});
  
