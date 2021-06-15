@@ -287,6 +287,18 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
                     console.log("Added doc with ID: ", transID);
                 });
         
+                db,collection("SwiftGas_Client").doc(userid).collection("Notifications").doc().set({
+                    User_ID:_VendorId,
+                    type:"Gas Order: \n" +_Name +" "+_ItemDesc,
+                    Order_iD:id,
+                    Name:"Ordered "+_Name +" "+_ItemDesc, 
+                    to:userid,
+                    from:userid,
+                   timestamp:new Date(),
+                }).then((ref) => {
+                    console.log("Notification sent", transID);
+                });
+
                 db.collection("Order_request").doc(id).set({
                     mpesaReceipt : transID,
                     doc_id: id,
@@ -969,7 +981,19 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
                 batch2.commit().then((ref) =>{
                     console.log("Printed successfully: ", _Paymentid);
     
+                   
     
+                    boost.collection("Notifications").doc().set({
+                        User_ID:_Paymentid,
+                        type:"Depostion",
+                        Order_iD:id,
+                        Name:"You deposited ksh"+_amount, 
+                        to:id,
+                        from:id,
+                       timestamp:new Date(),
+                    }).then((ref) => {
+                        console.log("Notification sent", transID);
+                    });
     
                     db.collection("Payments_backup").doc(transID).set({
                         mpesaReceipt : transID ,
@@ -991,6 +1015,8 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
                 
     
             });
+
+
         }else{
 
             amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
