@@ -603,7 +603,7 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
         var batch = db.batch();
         var batch2 = db.batch();
  
-        var boost = db.collection("Gas_Vendor").doc(_PayUserId);
+        var boost = db.collection("SwiftGas_Vendor").doc(_PayUserId);
         var boost2 = db.collection("Payment_History").doc(_PayID);
  
         batch.update(boost,{"Activation_fee":150});
@@ -677,7 +677,7 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
         var batch = db.batch();
         var batch2 = db.batch();
  
-        var boost = db.collection("Gas_Vendor").doc(_PayUserId);
+        var boost = db.collection("SwiftGas_Vendor").doc(_PayUserId);
         var boost2 = db.collection("Payment_History").doc(_PayID);
  
         batch.update(boost,{"Activation_fee":150});
