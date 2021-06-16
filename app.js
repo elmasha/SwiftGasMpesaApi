@@ -1325,7 +1325,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
         console.log("TransactionTime",transdate)
  
         var batch = db.batch();
-        var boost = db.collection("Gas_Vendor").doc(id);
+        var boost = db.collection("SwiftGas_Vendor").doc(id);
  
         batch.update(boost,{"Activation_fee":150});
  
