@@ -287,7 +287,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
                     console.log("Added doc with ID: ", transID);
                 });
         
-                db,collection("SwiftGas_Client").doc(userid).collection("Notifications").doc().set({
+                db.collection("SwiftGas_Client").doc(userid).collection("Notifications").doc().set({
                     User_ID:_VendorId,
                     type:"Gas Order: \n" +_Name +" "+_ItemDesc,
                     Order_iD:id,
