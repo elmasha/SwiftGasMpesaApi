@@ -1355,7 +1355,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
                     }).then((e)=>{
                         console.log("Notification sent successfully: ");
                     }).catch((error)=>{
-
+                        console.log(error);
                     })
 
 
