@@ -1288,7 +1288,8 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
         var batch = db.batch();
         var boost = db.collection("SwiftGas_Vendor").doc(id);
  
-        batch.update(boost,{"Activation_fee":"200"});
+        var fee = "200";
+        batch.update(boost,{"Activation_fee":fee});
  
         batch.commit().then((ref) =>{
             console.log("Batch complete was printed: ", transID);
@@ -1326,8 +1327,8 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
  
         var batch = db.batch();
         var boost = db.collection("SwiftGas_Vendor").doc(id);
- 
-        batch.update(boost,{"Activation_fee":"200"});
+        var fee = "200";
+        batch.update(boost,{"Activation_fee":fee});
  
         batch.commit().then((ref) =>{
             console.log("Batch complete: ", transID);
