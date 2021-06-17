@@ -706,7 +706,7 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
             batch2.commit().then((ref) =>{
                 console.log("Printed successfully: ", _PayID);
  
-                db.collection("Notifications").doc(_PayID).set({
+                boost.collection("Notifications").doc(_PayID).set({
                  Name : _PaymentName,
                  User_ID : _PayUserId,
                  type : _PayType,
