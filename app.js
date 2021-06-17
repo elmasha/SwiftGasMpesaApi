@@ -1291,7 +1291,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
         batch.update(boost,{"Activation_fee":"200"});
  
         batch.commit().then((ref) =>{
-            console.log("Batch complete: ", transID);
+            console.log("Batch complete was printed: ", transID);
  
                 db.collection("Payments_backup").doc(transID).set({
                     mpesaReceipt : transID ,
