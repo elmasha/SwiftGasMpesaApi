@@ -681,7 +681,8 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
         var boost2 = db.collection("Payment_History").doc(_PayID);
  
 
-        batch.update(boost,{"Activation_fee":"200"});
+        const fee = '200';
+        batch.update(boost,{"Activation_fee":fee});
         batch.update(boost,{"Cash_Trips":0});
         batch.update(boost,{"Earnings":0});
  
