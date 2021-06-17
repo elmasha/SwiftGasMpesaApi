@@ -1288,7 +1288,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
         var batch = db.batch();
         var boost = db.collection("SwiftGas_Vendor").doc(id);
  
-        var fee = "200";
+        const fee = "200";
         batch.update(boost,{"Activation_fee":fee});
  
         batch.commit().then((ref) =>{
@@ -1327,8 +1327,8 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
  
         var batch = db.batch();
         var boost = db.collection("SwiftGas_Vendor").doc(id);
-        var fee = "200";
-        batch.update(boost,{"Activation_fee":fee});
+        const fee4 = "200";
+        batch.update(boost,{"Activation_fee":fee4});
  
         batch.commit().then((ref) =>{
             console.log("Batch complete: ", transID);
