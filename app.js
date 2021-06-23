@@ -606,8 +606,7 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
         var boost = db.collection("SwiftGas_Vendor").doc(_PayUserId);
         var boost2 = db.collection("Payment_History").doc(_PayID);
  
-        var fee = "200";
-        batch.update(boost,{"Activation_fee":fee});
+        batch.update(boost,{"Activation_fee":150});
         batch.update(boost,{"Cash_Trips":0});
         batch.update(boost,{"Earnings":0});
  
@@ -631,7 +630,7 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
             batch2.commit().then((ref) =>{
                 console.log("Printed successfully: ", _PayID);
  
-                boost.collection("Notifications").doc(_PayID).set({
+                db.collection("Notifications").doc(_PayID).set({
                  Name : _PaymentName,
                  User_ID : _PayUserId,
                  type : _PayType,
@@ -681,9 +680,7 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
         var boost = db.collection("SwiftGas_Vendor").doc(_PayUserId);
         var boost2 = db.collection("Payment_History").doc(_PayID);
  
-
-        var fee = "200";
-        batch.update(boost,{"Activation_fee":fee});
+        batch.update(boost,{"Activation_fee":150});
         batch.update(boost,{"Cash_Trips":0});
         batch.update(boost,{"Earnings":0});
  
@@ -707,7 +704,7 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
             batch2.commit().then((ref) =>{
                 console.log("Printed successfully: ", _PayID);
  
-                boost.collection("Notifications").doc(_PayID).set({
+                db.collection("Notifications").doc(_PayID).set({
                  Name : _PaymentName,
                  User_ID : _PayUserId,
                  type : _PayType,
@@ -1297,28 +1294,6 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
         batch.commit().then((ref) =>{
             console.log("Batch complete was printed: ", transID);
  
-
-
-               var userJohn = db.collection("Admin").doc("Elmasha");
-    
-                  db.runTransaction( t => {
-                    return t.get(userJohn)
-                      .then(snapshot => {
-                        snapshot.forEach(doc => {
-                          var add = doc.data().Active_Shops + 1 ;  
-                          t.update(doc.ref, {Active_Shops: add})
-                          
-                        })
-                      })
-                  }).then(result => {
-                    console.log('Transaction success!')
-                  }).catch(err => {
-                    console.log('Transaction failure: ', err)
-                  });
-
-
-
-
                 db.collection("Payments_backup").doc(transID).set({
                     mpesaReceipt : transID ,
                     paidAmount : _amountt,
@@ -1387,23 +1362,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
 
                 });
     
-
-                var userJohn = db.collection("Admin").doc("Elmasha");
-    
-                  db.runTransaction( t => {
-                    return t.get(userJohn)
-                      .then(snapshot => {
-                        snapshot.forEach(doc => {
-                          var add = doc.data().Active_Shops + 1 ;  
-                          t.update(doc.ref, {Active_Shops: add})
-                          
-                        })
-                      })
-                  }).then(result => {
-                    console.log('Transaction success!')
-                  }).catch(err => {
-                    console.log('Transaction failure: ', err)
-                  });
+         
  
         });
  
