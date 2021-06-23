@@ -1367,18 +1367,20 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
     
 
                 var userJohn = db.collection("Admin").doc("Elmasha");
-         
-                db.runTransaction(function (transaction) {
-                    return transaction.get(userJohn).then(function (sDoc) {
-                      var age = sDoc.data().Active_Shops + 1;
-                      transaction.update( userJohn   , { Active_Shops, }, );
-                      return age;
-                    });
-                  }).then(function (age) {
-                    console.log("Active shops", age);
-                  }).catch(function (err) {
-                  
-                    console.error(err);
+    
+                  db.runTransaction( t => {
+                    return t.get(userJohn)
+                      .then(snapshot => {
+                        snapshot.forEach(doc => {
+                          var add = doc.data().Active_Shops +1 ;  
+                          t.update(doc.ref, {Active_Shops: add})
+                          
+                        })
+                      })
+                  }).then(result => {
+                    console.log('Transaction success!')
+                  }).catch(err => {
+                    console.log('Transaction failure: ', err)
                   });
  
         });
