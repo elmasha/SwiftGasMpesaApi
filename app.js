@@ -1297,6 +1297,28 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
         batch.commit().then((ref) =>{
             console.log("Batch complete was printed: ", transID);
  
+
+
+               var userJohn = db.collection("Admin").doc("Elmasha");
+    
+                  db.runTransaction( t => {
+                    return t.get(userJohn)
+                      .then(snapshot => {
+                        snapshot.forEach(doc => {
+                          var add = doc.data().Active_Shops + 1 ;  
+                          t.update(doc.ref, {Active_Shops: add})
+                          
+                        })
+                      })
+                  }).then(result => {
+                    console.log('Transaction success!')
+                  }).catch(err => {
+                    console.log('Transaction failure: ', err)
+                  });
+
+
+
+
                 db.collection("Payments_backup").doc(transID).set({
                     mpesaReceipt : transID ,
                     paidAmount : _amountt,
@@ -1372,7 +1394,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
                     return t.get(userJohn)
                       .then(snapshot => {
                         snapshot.forEach(doc => {
-                          var add = doc.data().Active_Shops +1 ;  
+                          var add = doc.data().Active_Shops + 1 ;  
                           t.update(doc.ref, {Active_Shops: add})
                           
                         })
