@@ -606,7 +606,8 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
         var boost = db.collection("SwiftGas_Vendor").doc(_PayUserId);
         var boost2 = db.collection("Payment_History").doc(_PayID);
  
-        batch.update(boost,{"Activation_fee":150});
+        var fee = "200";
+        batch.update(boost,{"Activation_fee":fee});
         batch.update(boost,{"Cash_Trips":0});
         batch.update(boost,{"Earnings":0});
  
@@ -630,7 +631,7 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
             batch2.commit().then((ref) =>{
                 console.log("Printed successfully: ", _PayID);
  
-                db.collection("Notifications").doc(_PayID).set({
+                boost.collection("Notifications").doc(_PayID).set({
                  Name : _PaymentName,
                  User_ID : _PayUserId,
                  type : _PayType,
@@ -680,7 +681,9 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
         var boost = db.collection("SwiftGas_Vendor").doc(_PayUserId);
         var boost2 = db.collection("Payment_History").doc(_PayID);
  
-        batch.update(boost,{"Activation_fee":150});
+
+        var fee = "200";
+        batch.update(boost,{"Activation_fee":fee});
         batch.update(boost,{"Cash_Trips":0});
         batch.update(boost,{"Earnings":0});
  
@@ -704,7 +707,7 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
             batch2.commit().then((ref) =>{
                 console.log("Printed successfully: ", _PayID);
  
-                db.collection("Notifications").doc(_PayID).set({
+                boost.collection("Notifications").doc(_PayID).set({
                  Name : _PaymentName,
                  User_ID : _PayUserId,
                  type : _PayType,
