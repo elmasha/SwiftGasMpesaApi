@@ -1308,8 +1308,8 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
            
             var batch = db.batch();
             var boost8 = db.collection("Admin").doc("Elmasha");
-            const fee4 = 1 + _ToltalActivate;
-            batch.update(boost8,{"Active_Shops":fee4});
+            const add1 = 1 + _ToltalActivate;
+            batch.update(boost8,{"Active_Shops":add1});
      
             batch.commit().then((ref) =>{
                 console.log("Admin Updated: ");
@@ -1364,8 +1364,8 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
            //------------Adm9in section===
             var batch = db.batch();
             var boost7 = db.collection("Admin").doc("Elmasha");
-            const fee4 = 1 + _ToltalActivate;
-            batch.update(boost7,{"Active_Shops":fee4});
+            const add2 = 1 + _ToltalActivate;
+            batch.update(boost7,{"Active_Shops":add2});
      
             batch.commit().then((ref) =>{
                 console.log("Admin Updated: ");
