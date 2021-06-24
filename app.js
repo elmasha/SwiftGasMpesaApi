@@ -1159,7 +1159,7 @@ app.post('/stkDeposit/query',access,_urlencoded,function(req,res,next){
 
 
 /////------ACTIVATE MPESA STK --------///
-
+let _inactiveShops;
 ///----Stk Push ---//
 app.post('/stkActivate', access, _urlencoded,function(req,res){
 
@@ -1168,6 +1168,7 @@ app.post('/stkActivate', access, _urlencoded,function(req,res){
     _userActivateID = req.body.Uid;
    _usernameActivate = req.body.User_name;
    _activateNo = req.body.ActiveNo;
+   _inactiveShops = req.body.InActiveNo;
    let _transDec = req.body.transDec;
 
 
@@ -1252,6 +1253,7 @@ const middleware3 = (req, res, next) => {
    req.userid = _userActivateID;
    req.number = _phoneNumberActivate;  
    req.ActiveNo = _activateNo;
+   req.In_ActiveNo = _inactiveShops;
    next();
  };
  
@@ -1270,6 +1272,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
    let _amountt = req.amounT;
    let _Number = req.number;
    let _ToltalActivate = req.ActiveNo;
+   let _TotalInActiveShops = req.In_ActiveNo; 
 
 
 
@@ -1309,8 +1312,10 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
             var batch = db.batch();
             var boost8 = db.collection("Admin").doc("Elmasha");
             const add1 = 1 + _ToltalActivate;
+            const minus = 1 -_TotalInActiveShops;
             batch.update(boost8,{"Active_Shops":add1});
-     
+            batch.update(boost8,{"Inactive_shops":minus});
+    
             batch.commit().then((ref) =>{
                 console.log("Admin Updated: ");
      
@@ -1365,8 +1370,9 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
             var batch = db.batch();
             var boost7 = db.collection("Admin").doc("Elmasha");
             const add2 = 1 + _ToltalActivate;
+            const minus2 = 1 -_TotalInActiveShops;
             batch.update(boost7,{"Active_Shops":add2});
-     
+            batch.update(boost7,{"Inactive_shops":minus2});
             batch.commit().then((ref) =>{
                 console.log("Admin Updated: ");
      
