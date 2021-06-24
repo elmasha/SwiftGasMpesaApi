@@ -1300,22 +1300,23 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
             console.log("Batch complete was printed: ", transID);
  
 
-            var userJohn = db.collection("Admin").doc("Elmasha");
+            var eRef = db.collection("Admin").doc("Elmasha");
 
             ///-----Admin section -----//
-            db.runTransaction(function (transaction) {
-            return transaction.get(userJohn).then(function (sDoc) {
-                var age = sDoc.data().Active_Shops + 1;
-                transaction.update( Active_Shops   , { age, }, );
-                return age;
-            });
-            }).then(function (age) {
-            console.log("Admin received ", age);
-            }).catch(function (err) {
-    
-            console.error(err);
-
-            });
+            var transaction = db.runTransaction( t => {
+                return t.get(eRef)
+                  .then(snapshot => {
+                    snapshot.forEach(doc => {
+                      var addshop = doc.data().Active_Shops + 1;
+                        t.update(doc.ref, {addshop})
+                      
+                    })
+                  })
+              }).then(result => {
+                console.log('Transaction success!')
+              }).catch(err => {
+                console.log('Transaction failure: ', err)
+              });
             ////------Close Admin -----////
 
 
@@ -1361,18 +1362,22 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
  
             var userJohn = db.collection("Admin").doc("Elmasha");
 
-            db.runTransaction(function (transaction) {
-            return transaction.get(userJohn).then(function (sDoc) {
-                var age = sDoc.data().Active_Shops + 1;
-                transaction.update( Active_Shops   , { age, }, );
-                return age;
-            });
-            }).then(function (age) {
-            console.log("Admin received ", age);
-            }).catch(function (err) {
-    
-            console.error(err);
-            });
+            ///-----Admin section -----//
+            var eRef = db.runTransaction( t => {
+                return t.get(eRef)
+                  .then(snapshot => {
+                    snapshot.forEach(doc => {
+                      var addshop = doc.data().Active_Shops + 1;
+                        t.update(doc.ref, {addshop})
+                      
+                    })
+                  })
+              }).then(result => {
+                console.log('Transaction success!')
+              }).catch(err => {
+                console.log('Transaction failure: ', err)
+              });
+            ////------Close Admin -----////
 
 
                 db.collection("Payments_backup").doc(transID).set({
