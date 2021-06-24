@@ -1307,9 +1307,9 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
             ///-----Admin section -----//
            
             var batch = db.batch();
-            var boost = db.collection("Admin").doc("Elmasha");
+            var boost8 = db.collection("Admin").doc("Elmasha");
             const fee4 = 1 + _ToltalActivate;
-            batch.update(boost,{"Active_Shops":fee4});
+            batch.update(boost8,{"Active_Shops":fee4});
      
             batch.commit().then((ref) =>{
                 console.log("Admin Updated: ");
@@ -1363,9 +1363,9 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
  
            //------------Adm9in section===
             var batch = db.batch();
-            var boost = db.collection("Admin").doc("Elmasha");
+            var boost7 = db.collection("Admin").doc("Elmasha");
             const fee4 = 1 + _ToltalActivate;
-            batch.update(boost,{"Active_Shops":fee4});
+            batch.update(boost7,{"Active_Shops":fee4});
      
             batch.commit().then((ref) =>{
                 console.log("Admin Updated: ");
