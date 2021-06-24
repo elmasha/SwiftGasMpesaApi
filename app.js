@@ -78,7 +78,7 @@ app.get('/access_token',access,(req,res)=>{
 })
 
 
-
+let _noOfOrders;
 ///----Stk Push ---//
 app.post('/stk', access, _urlencoded,function(req,res){
 
@@ -111,6 +111,7 @@ app.post('/stk', access, _urlencoded,function(req,res){
      _user_image = req.body.User_image;
      _time_stamp = req.body.timestamp;
      _exCylinder = req.body.exCylinder;
+     _noOfOrders = req.body.noOfOrders;
      
 
 
@@ -210,6 +211,7 @@ const middleware = (req, res, next) => {
     req.latt = _lat;
     req.lngg = _lng;
     req.exCylinder = _exCylinder;
+    req.NoOfOrder = _noOfOrders;
     
     next();
   };
@@ -245,6 +247,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
     let _Lng = req.lngg;
     let _OrderStatus =  req.orderStatus;
     let _ExCylinder = req.exCylinder;
+    let _NoOrders = req.NoOfOrder;
     
 
     console.log('.......... STK Callback ..................');
@@ -286,6 +289,21 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
                     User_id : Userid,
                 }).then((ref) => {
                     console.log("Added doc with ID: ", transID);
+
+
+                        ///-----Admin section -----//
+                                                
+                        var batch9 = db.batch();
+                        var boost9 = db.collection("Admin").doc("Elmasha");
+                        const add1 = 1 + _NoOrders;
+                        batch9.update(boost9,{"No_of_Orders":add1});
+                        batch9.commit().then((ref) =>{
+                            console.log("Admin Updated: ");
+
+                        });
+
+                        ////------Close Admin -----////
+
                 });
         
                 db.collection("SwiftGas_Client").doc(Userid).collection("Notifications").doc().set({
@@ -360,7 +378,19 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
                 User_id : Userid,
             }).then((ref) => {
                 console.log("Added doc with ID: ", transID);
-                console.log("Added doc with ID: ", transID);
+
+                 ///-----Admin section -----//
+                                                
+                 var batch2 = db.batch();
+                 var boost2 = db.collection("Admin").doc("Elmasha");
+                 const add2 = 1 + _NoOrders;
+                 batch2.update(boost2,{"No_of_Orders":add2});
+                 batch2.commit().then((ref) =>{
+                     console.log("Admin Updated: ");
+
+                 });
+
+                 ////------Close Admin -----////
             });
     
             db.collection("Order_request").doc(id).set({
