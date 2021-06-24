@@ -1312,7 +1312,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
             var batch = db.batch();
             var boost8 = db.collection("Admin").doc("Elmasha");
             const add1 = 1 + _ToltalActivate;
-            const minus = 1 -_TotalInActiveShops;
+            const minus = _TotalInActiveShops - 1;
             batch.update(boost8,{"Active_Shops":add1});
             batch.update(boost8,{"Inactive_shops":minus});
     
@@ -1370,7 +1370,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
             var batch = db.batch();
             var boost7 = db.collection("Admin").doc("Elmasha");
             const add2 = 1 + _ToltalActivate;
-            const minus2 = 1 -_TotalInActiveShops;
+            const minus2 = _TotalInActiveShops - 1;
             batch.update(boost7,{"Active_Shops":add2});
             batch.update(boost7,{"Inactive_shops":minus2});
             batch.commit().then((ref) =>{
