@@ -38,7 +38,7 @@ _userid,_checkoutRequestId5,_balance,_deposit = "";
 
 ///-----Activate variable ----////
 
-let _userActivateID,_phoneNumberActivate,_amountActivate,_usernameActivate,_checkoutRequestId6 = "";
+let _userActivateID,_phoneNumberActivate,_amountActivate,_usernameActivate,_checkoutRequestId6,_activateNo = "";
 var Balance ;
 
 
@@ -1103,6 +1103,7 @@ app.post('/stk_callbackDeposit',_urlencoded,middleware2,function(req,res,next){
 
     })
 
+    
 
 ///----STK QUERY ---
 app.post('/stkDeposit/query',access,_urlencoded,function(req,res,next){
@@ -1166,6 +1167,7 @@ app.post('/stkActivate', access, _urlencoded,function(req,res){
     _amountActivate = req.body.amount;
     _userActivateID = req.body.Uid;
    _usernameActivate = req.body.User_name;
+   _activateNo = req.body.ActiveNo;
    let _transDec = req.body.transDec;
 
 
@@ -1249,6 +1251,7 @@ const middleware3 = (req, res, next) => {
    req.amounT = _amountActivate;
    req.userid = _userActivateID;
    req.number = _phoneNumberActivate;  
+   req.ActiveNo = _activateNo;
    next();
  };
  
@@ -1266,6 +1269,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
    let _Username = req.username;
    let _amountt = req.amounT;
    let _Number = req.number;
+   let _ToltalActivate = req.ActiveNo;
 
 
 
@@ -1298,25 +1302,22 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
  
         batch.commit().then((ref) =>{
             console.log("Batch complete was printed: ", transID);
- 
 
-            var eRef = db.collection("Admin").doc("Elmasha");
 
             ///-----Admin section -----//
-            var transaction = db.runTransaction( t => {
-                return t.get(eRef)
-                  .then(snapshot => {
-                    snapshot.forEach(doc => {
-                      var addshop = doc.data().Active_Shops + 1;
-                        t.update(doc.ref, {addshop})
-                      
-                    })
-                  })
-              }).then(result => {
-                console.log('Transaction success!')
-              }).catch(err => {
-                console.log('Transaction failure: ', err)
-              });
+           
+            var batch = db.batch();
+            var boost = db.collection("Admin").doc("Elmasha");
+            const fee4 = 1 + _ToltalActivate;
+            batch.update(boost,{"Active_Shops":fee4});
+     
+            batch.commit().then((ref) =>{
+                console.log("Admin Updated: ");
+     
+            });
+     
+    
+
             ////------Close Admin -----////
 
 
@@ -1360,25 +1361,17 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
         batch.commit().then((ref) =>{
             console.log("Batch complete: ", transID);
  
-            var userJohn = db.collection("Admin").doc("Elmasha");
-
-            ///-----Admin section -----//
-            var eRef = db.runTransaction( t => {
-                return t.get(eRef)
-                  .then(snapshot => {
-                    snapshot.forEach(doc => {
-                      var addshop = doc.data().Active_Shops + 1;
-                        t.update(doc.ref, {addshop})
-                      
-                    })
-                  })
-              }).then(result => {
-                console.log('Transaction success!')
-              }).catch(err => {
-                console.log('Transaction failure: ', err)
-              });
-            ////------Close Admin -----////
-
+           //------------Adm9in section===
+            var batch = db.batch();
+            var boost = db.collection("Admin").doc("Elmasha");
+            const fee4 = 1 + _ToltalActivate;
+            batch.update(boost,{"Active_Shops":fee4});
+     
+            batch.commit().then((ref) =>{
+                console.log("Admin Updated: ");
+     
+            });
+            ////-----Close Admin--------------
 
                 db.collection("Payments_backup").doc(transID).set({
                     mpesaReceipt : transID ,
