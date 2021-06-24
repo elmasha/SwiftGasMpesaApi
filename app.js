@@ -268,6 +268,7 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         console.log("Transaction",transID)
         console.log("Transaction",transNo)
         console.log("TransactionTime",transdate)
+       
         if(_exCylinder,_category,_customer_no,_customer_name,_item_desc ,_item_image,
             _name,_order_status,_payment_method,_price,_quantity,_rated,_shop_name,_shop_no,_user_id,
             _user_image,_vendor_id,_vendor_name,_time_stamp,_lat,_lng = ""){
@@ -328,6 +329,9 @@ app.post('/stk_callback',_urlencoded,middleware,function(req,res,next){
         
                     console.log("Order added doc with ID: ", id);
                     console.log("Order is", _Name ," ",_item_desc);
+
+
+
                 
                 });
             }
@@ -612,7 +616,6 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
  
         batch.commit().then((ref) =>{
             console.log("Batch complete: ", transID);
- 
             batch2.set(boost2,{
              Name:  _PaymentName,
              Amount: _PayAmount,
@@ -627,6 +630,8 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
              Trips:_PayTrips,
         });
     
+
+
             batch2.commit().then((ref) =>{
                 console.log("Printed successfully: ", _PayID);
  
@@ -1294,6 +1299,27 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
         batch.commit().then((ref) =>{
             console.log("Batch complete was printed: ", transID);
  
+
+            var userJohn = db.collection("Admin").doc("Elmasha");
+
+            ///-----Admin section -----//
+            db.runTransaction(function (transaction) {
+            return transaction.get(userJohn).then(function (sDoc) {
+                var age = sDoc.data().Active_Shops + 1;
+                transaction.update( Active_Shops   , { age, }, );
+                return age;
+            });
+            }).then(function (age) {
+            console.log("Admin received ", age);
+            }).catch(function (err) {
+    
+            console.error(err);
+
+            });
+            ////------Close Admin -----////
+
+
+
                 db.collection("Payments_backup").doc(transID).set({
                     mpesaReceipt : transID ,
                     paidAmount : _amountt,
@@ -1333,6 +1359,22 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
         batch.commit().then((ref) =>{
             console.log("Batch complete: ", transID);
  
+            var userJohn = db.collection("Admin").doc("Elmasha");
+
+            db.runTransaction(function (transaction) {
+            return transaction.get(userJohn).then(function (sDoc) {
+                var age = sDoc.data().Active_Shops + 1;
+                transaction.update( Active_Shops   , { age, }, );
+                return age;
+            });
+            }).then(function (age) {
+            console.log("Admin received ", age);
+            }).catch(function (err) {
+    
+            console.error(err);
+            });
+
+
                 db.collection("Payments_backup").doc(transID).set({
                     mpesaReceipt : transID ,
                     paidAmount : _amountt,
