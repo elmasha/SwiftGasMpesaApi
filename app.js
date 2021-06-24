@@ -469,7 +469,7 @@ app.post('/stk/query',access,_urlencoded,function(req,res,next){
 /////------Remit MPESA STK --------///
 
 let _payname,_paycash,_payphone,_paytype,_paytrips,_payid,_checkoutRequestId7,_payuserid,
-_payusername;
+_payusername,_activeRemit,_inactiveRemit;
 
 ///----Stk Push ---//
 app.post('/stkRemit', access, _urlencoded,function(req,res){
@@ -484,6 +484,8 @@ app.post('/stkRemit', access, _urlencoded,function(req,res){
     _payusername= req.body.User_name;
     _paytrips = req.body.Trips;
     _payname = req.body.Name;
+    _activeRemit = req.body.ActiveNo;
+    _inactiveRemit = req.body.InActiveNo;
 
    let endpoint = " https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
    let auth = "Bearer "+ req.access_token
@@ -561,6 +563,8 @@ const middleware4 = (req, res, next) => {
    req.paytype = _paytype;
    req.payno = _payphone;
    req.paytrips = _paytrips;
+   req.ActiveNoRemit = _activeRemit;
+   req.InActiveNoRemit = _inactiveRemit;
    next();
  };
  
@@ -580,6 +584,9 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
    let _PayAmount = req.payamount;
    let _PayTrips = req.paytrips;
    let _PayPhone = req.payno;
+   let _ToltalActivateRemit = req.ActiveNoRemit;
+   let _TotalInActiveShopsRemit = req.InActiveNoRemit; 
+
 
 
    console.log('.......... STK Remit callback ..................');
@@ -610,6 +617,7 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
         var boost = db.collection("SwiftGas_Vendor").doc(_PayUserId);
         var boost2 = db.collection("Payment_History").doc(_PayID);
  
+
         batch.update(boost,{"Activation_fee":150});
         batch.update(boost,{"Cash_Trips":0});
         batch.update(boost,{"Earnings":0});
@@ -630,6 +638,25 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
              Trips:_PayTrips,
         });
     
+
+         ///-----Admin section -----//
+           
+         var batch7 = db.batch();
+         var boost8 = db.collection("Admin").doc("Elmasha");
+         const add1 = 1 + _ToltalActivateRemit;
+         const minus = _TotalInActiveShopsRemit - 1;
+         batch7.update(boost8,{"Active_Shops":add1});
+         batch7.update(boost8,{"Inactive_shops":minus});
+ 
+         batch7.commit().then((ref) =>{
+             console.log("Admin Updated: ");
+  
+         });
+  
+ 
+
+         ////------Close Admin -----////
+
 
 
             batch2.commit().then((ref) =>{
@@ -692,6 +719,8 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
         batch.commit().then((ref) =>{
             console.log("Batch complete: ", transID);
  
+
+
             batch2.set(boost2,{
              Name:  _PaymentName,
              Amount: _PayAmount,
@@ -706,6 +735,26 @@ app.post('/stk_callbackRemit',_urlencoded,middleware4,function(req,res,next){
              Trips:_PayTrips,
         });
     
+
+                ///-----Admin section -----//
+                        
+                var batch9 = db.batch();
+                var boost9 = db.collection("Admin").doc("Elmasha");
+                const add1 = 1 + _ToltalActivateRemit;
+                const minus = _TotalInActiveShopsRemit - 1;
+                batch9.update(boost9,{"Active_Shops":add1});
+                batch9.update(boost9,{"Inactive_shops":minus});
+
+                batch9.commit().then((ref) =>{
+                    console.log("Admin Updated: ");
+
+                });
+
+                ////------Close Admin -----////
+       
+
+
+
             batch2.commit().then((ref) =>{
                 console.log("Printed successfully: ", _PayID);
  
