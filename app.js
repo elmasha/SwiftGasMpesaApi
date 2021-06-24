@@ -1385,7 +1385,7 @@ app.post('/stk_callbackActivate',_urlencoded,middleware3,function(req,res,next){
                 }).then((ref) => {
                     console.log("Payment BackUP with ID: ", transID);
 
-                    boost.collection("Notifications").doc.set({
+                    boost.collection("Notifications").doc().set({
                         Name: "Account activated",
                         User_ID: id,
                         type: _Username+" your account has been activated.",
