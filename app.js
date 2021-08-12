@@ -1179,7 +1179,6 @@ app.post('/stk_callbackDeposit', _urlencoded, middleware2, function(req, res, ne
 })
 
 
-
 ///----STK QUERY ---
 app.post('/stkDeposit/query', access, _urlencoded, function(req, res, next) {
 
@@ -1227,6 +1226,356 @@ app.post('/stkDeposit/query', access, _urlencoded, function(req, res, next) {
         })
 
 })
+
+
+
+/////------VENDOR DEPOSIT MPESA STK --------///
+
+///----Stk Push ---//
+app.post('/stkVeDeposit', access, _urlencoded, function(req, res) {
+
+    _phoneNumber = req.body.phone;
+    _amount = req.body.amount;
+    _userid = req.body.user_ID;
+    _username = req.body.User_name;
+    let _transDec = req.body.transDec;
+    _checkoutRequestId5 = req.body.checkReqId;
+    _paymentid = req.body.Payment_ID;
+    _accountno = req.body.accountNO;
+    _transactiontype = req.body.transaction_type;
+    _transactiondesc = req.body.transaction_desc;
+    _previousamout = req.body.previousAmount;
+    _balance = req.body.balance;
+    _deposit = req.body.deposit;
+
+
+
+    let endpoint = " https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+    let auth = "Bearer " + req.access_token
+
+    let _shortCode = '4069571';
+    let _passKey = '8e2d5d66120bfb538400be31f2fa885e90ef3acb5bc037454bbf23223fcb394a'
+
+
+
+
+    console.log("phone", _phoneNumber)
+    console.log("amount", _amount)
+    console.log("userName", _username)
+    console.log("orderID", _paymentid)
+
+
+
+    const timeStamp = (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3);
+    const password =
+        Buffer.from(`${_shortCode}${_passKey}${timeStamp}`).toString('base64');
+
+    request({
+            url: endpoint,
+            method: "POST",
+            headers: {
+                "Authorization": auth
+            },
+
+            json: {
+
+                "BusinessShortCode": "4069571",
+                "Password": password,
+                "Timestamp": timeStamp,
+                "TransactionType": "CustomerPayBillOnline",
+                "Amount": _amount,
+                "PartyA": _phoneNumber,
+                "PartyB": "4069571", //Till  No.
+                "PhoneNumber": _phoneNumber,
+                "CallBackURL": "https://gasmpesa.herokuapp.com/stk_callbackVeDeposit",
+                "AccountReference": "SwiftGas digital Merchants",
+                "TransactionDesc": _transDec
+
+            }
+
+        },
+        (error, response, body) => {
+
+            if (error) {
+
+
+                console.log(error);
+                res.status(404).json(error);
+
+            } else {
+
+                res.status(200).json(body);
+                _checkoutRequestId5 = body.CheckoutRequestID;
+                console.log(body);
+                console.log(_checkoutRequestId5)
+
+
+            }
+
+
+        })
+
+});
+
+const middleware12 = (req, res, next) => {
+    req.payid = _paymentid;
+    req.checkoutid = _checkoutRequestId5;
+    req.username = _username;
+    req.accountno = _accountno;
+    req.transactiontype = _transactiontype;
+    req.transactiondesc = _transactiondesc
+    req.amounT = _amount;
+    req.previousamount = _previousamout;
+    req.userid = _userid;
+    req.depositt = _deposit;
+    req.number = _phoneNumber;
+    next();
+};
+
+//-----Callback Url ----///
+app.post('/stk_callbackVeDeposit', _urlencoded, middleware12, function(req, res, next) {
+    const payarray = [];
+    var transID = '';
+    var amount = '';
+    var transdate = '';
+    var transNo = '';
+    let id = req.userid;
+    let _CheckoutID = req.checkoutid;
+    let _Username = req.username;
+    let _AccountNo = req.accountno;
+    let _Transtype = req.transactiontype;
+    let _Transadesc = req.transactiondesc;
+    let _amountt = req.amounT;
+    let _Paymentid = req.payid;
+    let _Deposit = req.depositt;
+    let _Number = req.number;
+
+
+
+    console.log('.......... STK deposit callback ..................');
+    if (res.status(200)) {
+
+        console.log("ID", id)
+        console.log("CheckOutRequestID", _CheckoutID)
+
+        res.json((req.body.Body.stkCallback.CallbackMetadata))
+        console.log(req.body.Body.stkCallback.CallbackMetadata)
+
+        if (Balance = req.body.Body.stkCallback.CallbackMetadata.Item[2].Name == 'Balance') {
+            amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
+            transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
+            transNo = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value;
+            transdate = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
+
+
+            console.log("Amount", amount)
+            console.log("Transaction", transID)
+            console.log("Transaction", transNo)
+            console.log("TransactionTime", transdate)
+
+
+            let totalamount = _balance + _Deposit;
+            let previous = totalamount;
+            var currentbalance = _balance;
+            var batch = db.batch();
+            var batch2 = db.batch();
+
+            var boost = db.collection("SwiftGas_Vendor").doc(id);
+            var boost2 = db.collection("VendorWallet_Transaction").doc(_Paymentid);
+
+            batch.update(boost, { "Swift_wallet": totalamount });
+
+            batch.commit().then((ref) => {
+                console.log("Batch complete: ", transID);
+
+
+                batch2.set(boost2, {
+                    accountNO: _AccountNo,
+                    transaction_type: _Transtype,
+                    transaction_desc: _Transadesc,
+                    amount: _amountt,
+                    previousAmount: previous.toString(),
+                    currentBalance: currentbalance.toString(),
+                    timestamp: new Date(),
+                    Payment_ID: _Paymentid,
+                    User_Id: id,
+                    mpesaReceipt: transID,
+                    User_name: _Username,
+                });
+
+                batch2.commit().then((ref) => {
+                    console.log("Printed successfully: ", _Paymentid);
+
+
+
+                    boost.collection("Notifications").doc().set({
+                        User_ID: _Paymentid,
+                        type: "Depostion",
+                        Order_iD: id,
+                        Name: "You deposited ksh" + _amount,
+                        to: id,
+                        from: id,
+                        timestamp: new Date(),
+                    }).then((ref) => {
+                        console.log("Notification sent", transID);
+                    });
+
+                    db.collection("WalletPayments_backup").doc(transID).set({
+                        mpesaReceipt: transID,
+                        paidAmount: _amount,
+                        transNo: _Number,
+                        Doc_ID: _Paymentid,
+                        checkOutReqID: _CheckoutID,
+                        user_Name: _Username,
+                        timestamp: transdate,
+                        User_id: id,
+                    }).then((ref) => {
+                        console.log("Payment BackUP with ID: ", transID);
+                    });
+
+                });
+
+
+
+
+
+            });
+
+
+        } else {
+
+            amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
+            transID = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
+            transNo = req.body.Body.stkCallback.CallbackMetadata.Item[3].Value;
+            transdate = req.body.Body.stkCallback.CallbackMetadata.Item[2].Value;
+
+
+            console.log("Amount", amount)
+            console.log("Transaction", transID)
+            console.log("Transaction", transNo)
+            console.log("TransactionTime", transdate)
+
+
+            let totalamount = _balance + _Deposit;
+            let previous = totalamount;
+            var currentbalance = _balance;
+            var batch = db.batch();
+            var batch2 = db.batch();
+
+            var boost = db.collection("SwiftGas_Vendor").doc(id);
+            var boost2 = db.collection("VendorWallet_Transaction").doc(_Paymentid);
+
+            batch.update(boost, { "Swift_wallet": totalamount });
+
+            batch.commit().then((ref) => {
+                console.log("Batch complete: ", transID);
+
+
+                batch2.set(boost2, {
+                    accountNO: _AccountNo,
+                    transaction_type: _Transtype,
+                    transaction_desc: _Transadesc,
+                    amount: _amountt,
+                    previousAmount: previous.toString(),
+                    currentBalance: currentbalance.toString(),
+                    timestamp: new Date(),
+                    Payment_ID: _Paymentid,
+                    User_Id: id,
+                    mpesaReceipt: transID,
+                    User_name: _Username,
+                });
+
+                batch2.commit().then((ref) => {
+                    console.log("Printed successfully: ", _Paymentid);
+
+
+
+                    db.collection("WalletPayments_backup").doc(transID).set({
+                        mpesaReceipt: transID,
+                        paidAmount: _amount,
+                        transNo: _Number,
+                        Doc_ID: _Paymentid,
+                        checkOutReqID: _CheckoutID,
+                        user_Name: _Username,
+                        timestamp: transdate,
+                        User_id: id,
+                    }).then((ref) => {
+                        console.log("Payment BackUP with ID: ", transID);
+                    });
+
+                });
+
+
+
+
+
+            });
+
+        }
+
+
+
+    } else if (res.status(404)) {
+        res.json((req.body))
+        console.log(req.body.Body);
+    }
+
+    next()
+
+})
+
+
+///----STK QUERY ---
+app.post('/stkVeDeposit/query', access, _urlencoded, function(req, res, next) {
+
+    let _checkoutRequestId = req.body.checkoutRequestId
+
+    auth = "Bearer " + req.access_token
+
+    let endpoint = ' https://api.safaricom.co.ke/mpesa/stkpushquery/v1/query'
+    const _shortCode = '4069571'
+    const _passKey = '8e2d5d66120bfb538400be31f2fa885e90ef3acb5bc037454bbf23223fcb394a'
+    const timeStamp = (new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3)
+    const password = Buffer.from(`${_shortCode}${_passKey}${timeStamp}`).toString('base64')
+
+
+    request({
+            url: endpoint,
+            method: "POST",
+            headers: {
+                "Authorization": auth
+            },
+
+            json: {
+
+                'BusinessShortCode': _shortCode,
+                'Password': password,
+                'Timestamp': timeStamp,
+                'CheckoutRequestID': _checkoutRequestId
+
+            }
+
+        },
+        function(error, response, body) {
+
+            if (error) {
+
+                console.log(error);
+                res.status(404).json(body);
+
+            } else {
+                res.status(200).json(body)
+                console.log(body)
+                next()
+            }
+
+        })
+
+})
+
+
+
+
 
 
 
