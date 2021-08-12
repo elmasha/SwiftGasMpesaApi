@@ -1383,7 +1383,7 @@ app.post('/stk_callbackVeDeposit', _urlencoded, middleware12, function(req, res,
             var boost = db.collection("SwiftGas_Vendor").doc(id);
             var boost2 = db.collection("VendorWallet_Transaction").doc(_Paymentid);
 
-            batch.update(boost, { "Swift_wallet": totalamount });
+            batch.update(boost, { "SwiftWallet": totalamount });
 
             batch.commit().then((ref) => {
                 console.log("Batch complete: ", transID);
@@ -1465,7 +1465,7 @@ app.post('/stk_callbackVeDeposit', _urlencoded, middleware12, function(req, res,
             var boost = db.collection("SwiftGas_Vendor").doc(id);
             var boost2 = db.collection("VendorWallet_Transaction").doc(_Paymentid);
 
-            batch.update(boost, { "Swift_wallet": totalamount });
+            batch.update(boost, { "SwiftWallet": totalamount });
 
             batch.commit().then((ref) => {
                 console.log("Batch complete: ", transID);
